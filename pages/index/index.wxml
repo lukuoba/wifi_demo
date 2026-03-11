@@ -1,0 +1,6 @@
+<view class="container">
+  <!-- 仅展示加载/结果，无感知核心无需用户操作 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>正在连接WiFi...</text>
+  </view>
+</view>

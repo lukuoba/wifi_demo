@@ -1,0 +1,14 @@
+{
+  "pages": ["pages/index/index"],
+  "window": {
+    "navigationBarTitleText": "WiFi自动连接"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于自动连接WiFi，无需手动输入密码"
+    }
+  },
+  "requiredPrivateInfos": [
+    "chooseAddress"
+  ]
+}
