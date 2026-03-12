@@ -10,5 +10,18 @@
     "autoAudits": false,
     "showShadowRootInWxmlPanel": true,
     "compileHotReLoad": true
+  },
+  "condition": {
+    "miniprogram": {
+      "list": [
+        {
+          "name": "pages/index/index",
+          "pathName": "pages/index/index",
+          "query": "wifiId=1001",
+          "scene": null,
+          "launchMode": "default"
+        }
+      ]
+    }
   }
 }

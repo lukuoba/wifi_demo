@@ -1,8 +1,80 @@
 .container {
-  padding: 100rpx 0;
+  padding: 40rpx;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* WiFi信息区域 */
+.wifi-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 60rpx;
+}
+
+.wifi-name {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  display: block;
+  width: 100%;
+}
+
+.action-area {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 40rpx;
+}
+
+.connect-btn, .copy-btn {
+  background-color: #1296db;
+  color: #fff;
+  border-radius: 44rpx;
+  width: 320rpx;
+  font-size: 32rpx;
+  height: 88rpx;
+  line-height: 88rpx;
   text-align: center;
 }
-.loading text {
-  font-size: 32rpx;
+
+.copy-btn {
+  background-color: #ff976a; /* 复制密码按钮用橙色区分 */
+}
+
+/* WiFi图标容器 */
+.wifi-icon {
+  font-size: 128rpx;
+  color: #1296db;
+  margin-bottom: 24rpx;
+}
+
+/* WiFi连接中颜色循环动画 */
+.wifi-animate {
+  animation: wifiColorLoop 2s infinite linear;
+}
+
+/* 定义颜色循环关键帧（可自定义颜色） */
+@keyframes wifiColorLoop {
+  0% { color: #07c160; } /* 绿色 */
+  25% { color: #1989fa; } /* 蓝色 */
+  50% { color: #ff976a; } /* 橙色 */
+  75% { color: #ff0000; } /* 红色 */
+  100% { color: #07c160; } /* 回到绿色 */
+}
+
+.scan-btn {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.status-text {
+  margin-top: 40rpx;
+  font-size: 28rpx;
   color: #666;
 }

@@ -1,7 +1,13 @@
 {
-  "pages": ["pages/index/index"],
+  "pages": [
+    "pages/index/index"
+  ],
   "window": {
-    "navigationBarTitleText": "WiFi自动连接"
+    "navigationBarBackgroundColor": "#1296db",
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "WiFi连接",
+    "backgroundColor": "#1296db",
+    "backgroundColorTop": "#1296db"
   },
   "permission": {
     "scope.userLocation": {

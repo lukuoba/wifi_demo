@@ -1,6 +1,19 @@
 <view class="container">
-  <!-- 仅展示加载/结果，无感知核心无需用户操作 -->
-  <view class="loading" wx:if="{{loading}}">
-    <text>正在连接WiFi...</text>
+  <view class="wifi-info">
+    <text class="iconfont icon-wifi wifi-icon"></text>
+    <text class="wifi-name">WiFi：{{wifiInfo.SSID}}</text>
   </view>
+
+  <view class="action-area" wx:if="{{wifiInfo.SSID}}">
+
+    <button 
+      class="copy-btn" 
+      bindtap="copyPassword" 
+     wx:if="{{connectFailed}}"
+    >
+      复制 Wi-Fi 密码
+    </button>
+  </view>
+  
+  <!-- 仅展示加载/结果，无感知核心无需用户操作 -->
 </view>
