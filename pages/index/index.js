@@ -4,21 +4,27 @@ Page({
   data: {
     wifiInfo: {},
     loading: false,
-    connectFailed: false
+    connectFailed: false,
+    versionNum:0,
+    isAndroid:false,
+    isDevtools:false,
   },
 
   onLoad(options) {
     // onLoad 中仅获取参数并请求信息，不直接自动连接
     // 若需要自动连接，可保留原逻辑；若要改为点击后连接，则需注释掉 startWifi 调用
     const wifiId = options.wifiId;
-    const {isAndroid} = this.judgePlatform();
+    this.judgePlatform();
+    console.log('systemCountssystemCountssystemCounts',this.data.isAndroid,this.data.versionNum)
     if (wifiId) {
-      if(isAndroid){
+      if(this.data.isAndroid && (this.data.versionNum>10)){
+        this.fetchWifiInfo(wifiId)
+        this.setData({ loading: false, connectFailed: true })
+      }else if(this.data.isAndroid && ((this.data.versionNum<=10))){
         this.requestLocationPermission(wifiId);
       }else{
         this.fetchWifiInfo(wifiId);
       }
-      
     } else {
       wx.showToast({
         title: '请传入 wifiId',
@@ -41,6 +47,19 @@ Page({
         });
       }
     });
+    // wx.startWifi({
+    //   success: () => {
+        wx.connectWifi({
+          SSID: this.data.wifiInfo.SSID,
+          password: this.data.wifiInfo.password,
+          maunal: true,
+        })
+      // },
+      // fail: (err) => {
+      //   console.error('启动 Wi-Fi 模块失败', err)
+      // }
+    // })
+
   },
 
   // 请求位置权限
@@ -79,7 +98,9 @@ Page({
         if (res.data && res.data.SSID && res.data.password) {
           this.setData({ wifiInfo: res.data });
           // 获取成功后不直接 startWifi，等待用户点击“立即连接”
-          this.startWifi(res.data.SSID, res.data.password);
+          if(!this.data.isAndroid){
+            this.startWifi(res.data.SSID, res.data.password);
+          }
           return;
         }
 
@@ -100,45 +121,53 @@ Page({
   },
 // 判断手机系统
 judgePlatform() {
-  const platform = (wx.getDeviceInfo() || wx.getSystemInfoSync()).platform
-  const system = wx.getSystemInfoSync().system || ''
-  console.log('当前系统', platform,system)
+  const platform = wx.getDeviceInfo().platform
+  const systemStr = wx.getDeviceInfo().system || ''
+  const versionMatch = systemStr.match(/\d+/); 
+  if (versionMatch && versionMatch[0]) {
+    this.setData({
+      versionNum:parseInt(versionMatch[0], 10)
+    })
+  }
   const isAndroid = platform === 'android'
   const isDevtools = platform === 'devtools'
-  return { isAndroid, isDevtools }
-},
-  // 启动 Wi-Fi 模块并连接 Wi-Fi
-  startWifi(SSID, password) {
-    // 如果是开发者工具，直接提示并停止 loading
-    const { isDevtools } = this.judgePlatform();
-    if (isDevtools) {
-      wx.showToast({
-        title: '开发者工具不支持 Wi-Fi 连接',
-        icon: 'none'
-      });
-      this.setData({ loading: false });
-      return;
-    }
+  this.setData({
+    isAndroid:isAndroid,
+    isDevtools:isDevtools,
+  })
 
-    try {
-      wx.startWifi({
-        success: () => {
-          this.connectToWifi(SSID, password); // Wi-Fi 模块启动成功后连接
-        },
-        fail: (err) => {
-          wx.showToast({
-            title: '启动 Wi-Fi 模块失败',
-            icon: 'none',
-          });
-          this.setData({ loading: false, connectFailed: true }); // 启动失败也视为连接失败，显示复制密码
-          console.error(err);
-        },
-      });
-    } catch (error) {
-      console.error('startWifi error', error);
-      this.setData({ loading: false, connectFailed: true });
-    }
-  },
+},
+// 启动 Wi-Fi 模块并连接 Wi-Fi
+startWifi(SSID, password) {
+  // 如果是开发者工具，直接提示并停止 loading
+  if (this.data.isDevtools) {
+    wx.showToast({
+      title: '开发者工具不支持 Wi-Fi 连接',
+      icon: 'none'
+    });
+    this.setData({ loading: false });
+    return;
+  }
+
+  try {
+    wx.startWifi({
+      success: () => {
+        this.connectToWifi(SSID, password); // Wi-Fi 模块启动成功后连接
+      },
+      fail: (err) => {
+        wx.showToast({
+          title: '启动 Wi-Fi 模块失败',
+          icon: 'none',
+        });
+        this.setData({ loading: false, connectFailed: true }); // 启动失败也视为连接失败，显示复制密码
+        console.error(err);
+      },
+    });
+  } catch (error) {
+    console.error('startWifi error', error);
+    this.setData({ loading: false, connectFailed: true });
+  }
+},
 
   // 连接到 Wi-Fi
   connectToWifi(SSID, password) {
@@ -147,24 +176,63 @@ judgePlatform() {
         SSID: SSID,
         password: password,
         success: () => {
-          wx.showToast({
-            title: ' Wi-Fi连接成功',
-          });
-          this.setData({ loading: false, connectFailed: false });
+          console.log('初次连接请求发送成功判断详情')
+          // 关键：连接请求发送成功后，主动校验实际连接状态
+          this.checkWifiConnectStatus(SSID);
         },
         fail: (err) => {
           wx.showToast({
             title: '连接失败',
             icon: 'none',
           });
-          console.error(err);
+          console.error('是否链接失败',err);
           // 连接失败，显示复制密码按钮
           this.setData({ loading: false, connectFailed: true });
+          this.copyPassword()
         }
       });
     } catch (error) {
       console.error('connectWifi error', error);
       this.setData({ loading: false, connectFailed: true });
     }
-  }
+  },
+  // 核心：查询WiFi实际连接状态（验证是否真的连上目标WiFi）
+checkWifiConnectStatus(targetSSID) {
+  // 延迟查询（避免连接请求还未完成就校验，导致误判）
+  setTimeout(() => {
+    wx.getConnectedWifi({
+      success: (res) => {
+        console.log('res检测',res)
+        const connectedSSID = res.wifi.SSID;
+        // 校验：当前连接的WiFi是否是目标WiFi（忽略大小写）
+        if (connectedSSID.toUpperCase() === targetSSID.toUpperCase()) {
+          wx.showToast({
+            title: 'WiFi连接成功',
+            icon: 'success'
+          });
+          this.setData({ loading: false, connectFailed: false });
+          // 可选：保存连接状态到本地
+          wx.setStorageSync('connected_wifi', connectedSSID);
+        } else {
+          // 假成功：请求成功但未连上目标WiFi
+          wx.showToast({
+            title: `已连接其他WiFi：${connectedSSID}`,
+            icon: 'none'
+          });
+          this.setData({ loading: false, connectFailed: true });
+        }
+      },
+      fail: (err) => {
+        // 未连接任何WiFi/查询失败
+        console.error('查询WiFi连接状态失败：', err);
+        wx.showToast({
+          title: 'WiFi连接失败（未检测到连接）',
+          icon: 'none'
+        });
+        this.setData({ loading: false, connectFailed: true });
+      }
+    });
+  }, 1500); // 延迟1.5秒：适配不同机型的连接响应速度
+},
+
 })

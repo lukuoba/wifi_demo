@@ -9,7 +9,7 @@
     <button 
       class="copy-btn" 
       bindtap="copyPassword" 
-     wx:if="{{connectFailed}}"
+      wx:if="{{connectFailed}}"
     >
       复制 Wi-Fi 密码
     </button>
