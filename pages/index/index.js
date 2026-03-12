@@ -43,8 +43,9 @@ Page({
     });
   },
 
-    // 请求位置权限
+  // 请求位置权限
   requestLocationPermission(wifiId) {
+    console.log('请求位置权限')
     wx.getSetting({
       success: (res) => {
         if (!res.authSetting['scope.userLocation']) {
@@ -54,7 +55,6 @@ Page({
               this.fetchWifiInfo(wifiId); // 授权成功后请求 Wi-Fi 信息
             },
             fail: () => {
-              this.setData({ loading: false });
               wx.showModal({
                 title: '位置权限',
                 content: '请授权位置信息以连接 Wi-Fi',
@@ -65,14 +65,12 @@ Page({
               });
             },
           });
+        } else {
+          this.fetchWifiInfo(wifiId);
         }
-      },
-      fail: () => {
-        this.setData({ loading: false });
       },
     });
   },
-
   // 根据 wifiId 从后端获取 Wi-Fi 信息
   fetchWifiInfo(wifiId) {
     getWifiInfo(wifiId)
@@ -103,6 +101,8 @@ Page({
 // 判断手机系统
 judgePlatform() {
   const platform = (wx.getDeviceInfo() || wx.getSystemInfoSync()).platform
+  const system = wx.getSystemInfoSync().system || ''
+  console.log('当前系统', platform,system)
   const isAndroid = platform === 'android'
   const isDevtools = platform === 'devtools'
   return { isAndroid, isDevtools }

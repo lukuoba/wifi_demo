@@ -49,7 +49,8 @@
 
 /* WiFi图标容器 */
 .wifi-icon {
-  font-size: 128rpx;
+  width: 230rpx;
+  height: 230rpx;
   color: #1296db;
   margin-bottom: 24rpx;
 }
