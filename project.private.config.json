@@ -15,11 +15,18 @@
     "miniprogram": {
       "list": [
         {
+          "name": "pages/icon/icon",
+          "pathName": "pages/icon/icon",
+          "query": "",
+          "scene": null,
+          "launchMode": "default"
+        },
+        {
           "name": "pages/index/index",
           "pathName": "pages/index/index",
           "query": "wifiId=1001",
-          "scene": null,
-          "launchMode": "default"
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }

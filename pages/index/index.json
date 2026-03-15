@@ -1,5 +1,7 @@
 {
   "usingComponents": {
-    "navigation-bar": "/components/navigation-bar/navigation-bar"
+    "navigation-bar": "/components/navigation-bar/navigation-bar",
+    "icon": "/components/icon/icon",
+    "play-game": "/components/play-game/play-game"
   }
 }

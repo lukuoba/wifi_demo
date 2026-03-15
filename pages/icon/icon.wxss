@@ -1,0 +1,39 @@
+.container {
+  min-height: 100vh;
+  padding: 30rpx;
+}
+
+.title {
+  color: #fff;
+  font-size: 36rpx;
+  margin-bottom: 30rpx;
+  text-align: center;
+}
+
+.icon-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+}
+
+.item {
+  width: 150rpx;
+  background: #1e1e1e;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+}
+
+.name {
+  color: #999;
+  font-size: 22rpx;
+  margin-top: 10rpx;
+  max-width:166rpx;
+  text-align:center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

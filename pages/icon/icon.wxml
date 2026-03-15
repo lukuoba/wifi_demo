@@ -1,0 +1,15 @@
+<view class="container">
+  <view class="title">图标库（点击复制名称）</view>
+  <view class="icon-grid">
+    <view 
+      class="item" 
+      wx:for="{{icons}}" 
+      wx:key="index"
+      bindtap="copyIcon"
+      data-name="{{item}}"
+    >
+      <icon name="{{item}}" size="{{40}}" color="#fff"></icon>
+      <view class="name">icon-{{item}}</view>
+    </view>
+  </view>
+</view>

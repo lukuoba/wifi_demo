@@ -1,81 +1,164 @@
-.container {
-  padding: 40rpx;
-  text-align: center;
+/* 主页面 */
+.page-container {
+  background-color: #fff;
+  min-height: 100vh;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+/* 顶部栏 */
+.top-bar {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.title-left {
+  display: flex;
   align-items: center;
 }
 
-/* WiFi信息区域 */
-.wifi-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  margin-bottom: 60rpx;
+.avatar {
+  width: 50rpx;
+  height: 50rpx;
+  border-radius: 50%;
+  margin-right: 16rpx;
 }
 
-.wifi-name {
-  font-size: 40rpx;
-  font-weight: bold;
-  color: #333;
-  text-align: center;
-  display: block;
-  width: 100%;
-}
-
-.action-area {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 40rpx;
-}
-
-.connect-btn, .copy-btn {
-  background-color: #1296db;
+.title {
+  font-size: 36rpx;
   color: #fff;
-  border-radius: 44rpx;
-  width: 320rpx;
+  font-weight: bold;
+}
+
+.title-right {
+  display: flex;
+  align-items: center;
+}
+
+.new-game {
+  color: #ff3a3a;
+  font-size: 28rpx;
+  margin-right: 20rpx;
+}
+
+.bell {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+/* 2×2 卡片 */
+.grid-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32rpx;
+  margin-bottom: 40rpx;
+}
+
+.card-item {
+  width: calc((100% - 32rpx) / 2);
+  box-sizing: border-box;
+  background: rgba(42, 33, 42, 0.7);
+  border-radius: 24rpx;
+  padding: 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 0 12rpx rgba(255,255,255,0.05);
+}
+
+.icon {
+  font-size: 44rpx;
+  margin-bottom: 16rpx;
+}
+
+.red { color: #ff4747; }
+.blue { color: #4285f4; }
+.gold { color: #f9b950; }
+.green { color: #50fa7b; }
+
+.card-text {
+  color: #f0f0f0;
+  font-size: 26rpx;
+}
+
+/* 计分卡片 */
+.score-card {
+  background: #1e1e1e;
+  border-radius: 28rpx;
+  padding: 36rpx;
+  margin-bottom: 40rpx;
+}
+
+.score-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30rpx;
+}
+
+.score-title {
+  color: #fff;
   font-size: 32rpx;
-  height: 88rpx;
-  line-height: 88rpx;
+  font-weight: bold;
+}
+
+.score-status {
+  color: #ff3a3a;
+  font-size: 24rpx;
+}
+
+/* 玩家列表 */
+.player-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.name {
+  color: #e0e0e0;
+  font-size: 28rpx;
+}
+
+.score {
+  font-size: 30rpx;
+  font-weight: bold;
+}
+
+.plus { color: #50fa7b; }
+.minus { color: #ff5555; }
+
+/* 按钮 */
+.action-box {
+  margin-top: 30rpx;
+  display: flex;
+  justify-content: center;
+}
+
+.record-btn {
+  background-color: #ff3a3a;
+  color: #fff;
+  padding: 24rpx 60rpx;
+  border-radius: 50rpx;
+  font-size: 28rpx;
+}
+
+/* 广告位 */
+.ad-container {
+  background: #1e1e1e;
+  border-radius: 20rpx;
+  padding: 20rpx;
   text-align: center;
 }
 
-.copy-btn {
-  background-color: #ff976a; /* 复制密码按钮用橙色区分 */
+.ad-label {
+  color: #888;
+  font-size: 22rpx;
+  margin-bottom: 10rpx;
 }
 
-/* WiFi图标容器 */
-.wifi-icon {
-  width: 230rpx;
-  height: 230rpx;
-  color: #1296db;
-  margin-bottom: 24rpx;
-}
-
-/* WiFi连接中颜色循环动画 */
-.wifi-animate {
-  animation: wifiColorLoop 2s infinite linear;
-}
-
-/* 定义颜色循环关键帧（可自定义颜色） */
-@keyframes wifiColorLoop {
-  0% { color: #07c160; } /* 绿色 */
-  25% { color: #1989fa; } /* 蓝色 */
-  50% { color: #ff976a; } /* 橙色 */
-  75% { color: #ff0000; } /* 红色 */
-  100% { color: #07c160; } /* 回到绿色 */
-}
-
-.scan-btn {
-  width: 80%;
-  margin: 0 auto;
-}
-
-.status-text {
-  margin-top: 40rpx;
-  font-size: 28rpx;
-  color: #666;
+.ad-content {
+  color: #ccc;
+  font-size: 24rpx;
+  padding: 30rpx 0;
 }

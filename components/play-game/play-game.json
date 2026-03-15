@@ -1,6 +1,5 @@
 {
-  "component": true,
-  "styleIsolation": "apply-shared",
+  "component": true ,
   "usingComponents": {
     "icon": "/components/icon/icon"
   }

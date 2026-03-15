@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "icon": "/components/icon/icon"
+  },
+  "navigationBarTitleText": "图标库",
+  "navigationBarTextStyle": "white"
+}

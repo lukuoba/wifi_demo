@@ -1,19 +1,25 @@
-<view class="container">
-  <view class="wifi-info" wx:if="{{wifiInfo.SSID}}">
-    <image class="wifi-icon" src="data:image/svg+xml;base64,PHN2ZyB0PSIxNzczMzA3ODcwMDY5IiBjbGFzcz0iaWNvbiIgdmlld0JveD0iMCAwIDExNzAgMTAyNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjIzMDEiIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48cGF0aCBkPSJNNTg1LjE0Mjg1NyA4NzAuMjkwMjg2Yy0xNC44NDggMC05NC44NjYyODYtODAuMDE4Mjg2LTk0Ljg2NjI4Ni05NS40MTQ4NTcgMC0yOC4wMTM3MTQgNzMuMTQyODU3LTQzLjQ0Njg1NyA5NC44NjYyODYtNDMuNDQ2ODU4czk0Ljg2NjI4NiAxNS40MzMxNDMgOTQuODY2Mjg2IDQzLjQ0Njg1OGMwIDE1LjQzMzE0My04MC4wMTgyODYgOTUuNDE0ODU3LTk0Ljg2NjI4NiA5NS40MTQ4NTd6IG0xNTQuMjk0ODU3LTE1NC44NDM0MjlDNzMxLjQyODU3MSA3MTUuNDQ2ODU3IDY2OS4xNDc0MjkgNjU4LjI4NTcxNCA1ODUuMTQyODU3IDY1OC4yODU3MTRjLTg0LjU1MzE0MyAwLTE0NS43MDA1NzEgNTcuMTYxMTQzLTE1NC4yOTQ4NTcgNTcuMTYxMTQzLTEzLjcxNDI4NiAwLTk2LjU4NTE0My04Mi4yODU3MTQtOTYuNTg1MTQzLTk2IDAtNS4xNTY1NzEgMi4zMDQtOS43MjggNS43MDUxNDMtMTMuMTI5MTQzIDYxLjE0NzQyOS02MC41NjIyODYgMTYwLjU4NTE0My05NC4yODExNDMgMjQ1LjEzODI4Ni05NC4yODExNDNzMTgzLjk5MDg1NyAzMy43MTg4NTcgMjQ1LjEzODI4NSA5NC4yODExNDNhMTguNTc4Mjg2IDE4LjU3ODI4NiAwIDAgMSA1LjcwNTE0MyAxMy4xMjkxNDNjMCAxMy43MTQyODYtODIuODcwODU3IDk2LTk2LjU4NTE0MyA5NnogbTE1NS45NzcxNDMtMTU1LjQyODU3MWEyNS45NjU3MTQgMjUuOTY1NzE0IDAgMCAxLTEzLjEyOTE0My00LjU3MTQyOWMtOTQuMjgxMTQzLTczLjE0Mjg1Ny0xNzMuNzE0Mjg2LTExNi41NTMxNDMtMjk3LjE0Mjg1Ny0xMTYuNTUzMTQzLTE3Mi41ODA1NzEgMC0zMDQuMDE4Mjg2IDEyMS4xNjExNDMtMzEwLjI3MiAxMjEuMTYxMTQzLTEzLjEyOTE0MyAwLTk1LjQxNDg1Ny04Mi4yODU3MTQtOTUuNDE0ODU3LTk2IDAtNC41NzE0MjkgMi4zMDQtOS4xNDI4NTcgNS43MDUxNDMtMTIuNTgwNTcxIDEwMi4yOTAyODYtMTAyLjI5MDI4NiAyNTYuNTg1MTQzLTE1OC44NjYyODYgNDAwLjAxODI4Ni0xNTguODY2Mjg2czI5Ny43MjggNTYuNTc2IDQwMC4wMTgyODUgMTU4Ljg2NjI4NmExOC4zNTg4NTcgMTguMzU4ODU3IDAgMCAxIDUuNzA1MTQzIDEyLjU4MDU3MWMwIDEzLjcxNDI4Ni04Mi4yODU3MTQgOTYtOTUuNDE0ODU3IDk2eiBtMTU0Ljg4LTE1NC44OGEyMC42NjI4NTcgMjAuNjYyODU3IDAgMCAxLTEyLjU4MDU3MS01LjE1NjU3MkM5MDUuNzI4IDI4My45NzcxNDMgNzYzLjQyODU3MSAyMTkuNDI4NTcxIDU4NS4xNDI4NTcgMjE5LjQyODU3MVMyNjQuNTU3NzE0IDI4NC4wMTM3MTQgMTMyLjU3MTQyOSAzOTkuOTgxNzE0YTIwLjY2Mjg1NyAyMC42NjI4NTcgMCAwIDEtMTIuNTgwNTcyIDUuMTU2NTcyYy0xMy4xMjkxNDMgMC05Ni04Mi4yODU3MTQtOTYtOTYgMC01LjE1NjU3MSAyLjMwNC05LjcyOCA1LjcwNTE0My0xMy4xMjkxNDNDMTc0LjI2Mjg1NyAxNTIuNTc2IDM4Mi44Mjk3MTQgNzMuMTQyODU3IDU4NS4xNDI4NTcgNzMuMTQyODU3czQxMC44NDM0MjkgNzkuNDMzMTQzIDU1NS40NDY4NTcgMjIyLjg2NjI4NmExOC41NzgyODYgMTguNTc4Mjg2IDAgMCAxIDUuNzA1MTQzIDEzLjEyOTE0M2MwIDEzLjcxNDI4Ni04Mi44NzA4NTcgOTYtOTYgOTZ6IiBmaWxsPSIjMTI5NmRiIiBwLWlkPSIyMzAyIj48L3BhdGg+PC9zdmc+" mode="aspectFit"></image>
-    <text class="wifi-name">WiFi：{{wifiInfo.SSID}}</text>
-  </view>
+<!-- 主容器 -->
+<view class="page-container">
 
-  <view class="action-area" wx:if="{{wifiInfo.SSID}}">
-
-    <button 
-      class="copy-btn" 
-      bindtap="copyPassword" 
-      wx:if="{{connectFailed}}"
-    >
-      复制 Wi-Fi 密码
-    </button>
+<!-- 2×2 功能卡片 -->
+<view class="grid-box">
+  <view class="card-item" wx:for="{{selectCard}}"  wx:key="index"  data-name="{{item}}" bindtap="selectCard">
+    <icon name="{{item.icon}}" size="{{40}}" color="#fff"/>
+    <text class="card-text">{{item.name}}</text>
   </view>
-  
-  <!-- 仅展示加载/结果，无感知核心无需用户操作 -->
+</view>
+
+<!-- 中间：当前计分卡片 -->
+<play-game />
+
+<!-- 底部广告位 -->
+<view class="ad-container">
+  <view class="ad-label">赞助内容</view>
+  <view class="ad-content">
+    <text>观看视频广告解锁高级功能</text>
+  </view>
+</view>
+
+<navigation-bar active="home" />
+
 </view>

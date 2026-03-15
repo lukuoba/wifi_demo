@@ -1,0 +1,45 @@
+<!-- components/play-game/play-game.wxml -->
+<view class="game-card">
+  <!-- 头部信息 -->
+  <view class="card-header">
+    <view class="header-left">
+      <text class="game-title">多人计分桌</text>
+      <text class="game-status">进行中</text>
+    </view>
+    <view class="header-actions">
+      <view class="action-icon">
+        <icon name="zhexiantu" size="{{24}}" color="#666" />
+      </view>
+      <view class="action-icon">
+        <icon name="mark-pen-line" size="{{24}}" color="#666" />
+      </view>
+      <view class="action-icon">
+        <icon name="Icon" size="{{24}}" color="#666" />
+      </view>
+      <view class="action-icon">
+        <icon name="shanchuanniu" size="{{24}}" color="#666" />
+      </view>
+    </view>
+  </view>
+
+  <!-- 玩家列表 -->
+  <view class="player-grid">
+    <view class="player-item" wx:for="{{players}}" wx:key="id">
+      <view class="avatar-container">
+        <!-- 桌主标记 -->
+        <view wx:if="{{item.isOwner}}" class="owner-tag">桌主</view>
+        <!-- 占位头像 -->
+        <view class="avatar-placeholder">
+          <text wx:if="{{item.id === 3}}" class="avatar-text">台</text>
+        </view>
+      </view>
+      <text class="player-name">{{item.name}}</text>
+      <text class="player-score {{item.score < 0 ? 'negative' : ''}}">{{item.score}}</text>
+    </view>
+  </view>
+
+  <!-- 底部时间 -->
+  <view class="card-footer">
+    <text class="time-info">{{startTime}} 开始 | 已进行{{duration}}</text>
+  </view>
+</view>
