@@ -1,5 +1,5 @@
 <!-- components/play-game/play-game.wxml -->
-<view class="game-card">
+<view class="game-card" bindtap="onCardTap">
   <!-- 头部信息 -->
   <view class="card-header">
     <view class="header-left">

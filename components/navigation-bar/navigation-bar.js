@@ -19,7 +19,7 @@ Component({
   data: {
     navItems: [
       { id: 'home', name: '首页', icon: 'a-shouyeshuxing1shouye-xuanze', path: '/pages/index/index' },
-      { id: 'record', name: '记录', icon: 'jilu', path: '/pages/icon/icon' }, // 暂时跳到icon页演示
+      { id: 'record', name: '记录', icon: 'jilu', path: '/pages/record-game/record-game' },
       { id: 'mine', name: '我的', icon: 'tidanren', path: '/pages/icon/icon' }      // 暂时跳到icon页演示
     ]
   },

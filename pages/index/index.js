@@ -9,7 +9,16 @@ Page({
     versionNum: 0,
     isAndroid: false,
     isDevtools: false,
-    selectCard:[{
+    currentGame: {
+      players: [
+        { id: 1, name: '我', score: 850, isOwner: false },
+        { id: 2, name: 'Dragunov', score: -240, isOwner: false },
+        { id: 3, name: 'Sarah', score: -610, isOwner: false }
+      ],
+      startTime: '26-03-16 12:00',
+      duration: '2小时15分'
+    },
+    selectCard: [{
       id:1,
       name:"单人记分局",
       des:"一人记分整局",

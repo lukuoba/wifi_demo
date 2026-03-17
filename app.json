@@ -1,7 +1,10 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/icon/icon"
+    "pages/icon/icon",
+    "pages/record-game/record-game",
+    "pages/rank-list/rank-list",
+    "pages/game-detail/game-detail"
   ],
   "window": {
     "navigationBarBackgroundColor": "#fff",
@@ -17,5 +20,8 @@
   },
   "requiredPrivateInfos": [
     "chooseAddress"
-  ]
+  ],
+  "useExtendedLib": {
+    "weui": true
+  }
 }

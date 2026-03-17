@@ -1,0 +1,50 @@
+<!-- pages/game-detail/game-detail.wxml -->
+<view class="container">
+  <!-- 顶部操作栏 -->
+  <view class="action-bar">
+    <view 
+      wx:for="{{actions}}" 
+      wx:key="id" 
+      class="action-item" 
+      bindtap="onActionTap" 
+      data-id="{{item.id}}"
+    >
+      <icon name="{{item.icon}}" size="{{28}}" color="#666" />
+      <text class="action-name">{{item.name}}</text>
+    </view>
+  </view>
+
+  <!-- 玩家列表 -->
+  <view class="player-list">
+    <view 
+      wx:for="{{players}}" 
+      wx:key="id" 
+      class="player-card"
+    >
+      <view class="player-left">
+        <view class="avatar-container">
+          <view wx:if="{{item.isOwner}}" class="owner-tag">桌主</view>
+          <view class="avatar-placeholder" style="background-color: {{item.avatarColor}}">
+            <text wx:if="{{item.avatarText}}" class="avatar-text">{{item.avatarText}}</text>
+            <!-- 模拟图片中的头像图片，这里仅展示占位 -->
+            <icon wx:if="{{!item.avatarText}}" name="rongqi" size="{{32}}" color="#ccc" />
+          </view>
+        </view>
+        <view class="player-main">
+          <view class="player-name">{{item.name}}</view>
+          <view class="player-score-info">
+            <text class="score-type">{{item.type}}：</text>
+            <text class="score-value">{{item.score}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="player-right">
+        <button 
+          class="give-btn" 
+          bindtap="giveScore" 
+          data-name="{{item.name}}"
+        >给分</button>
+      </view>
+    </view>
+  </view>
+</view>

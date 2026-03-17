@@ -1,0 +1,57 @@
+<!-- components/filter-drawer/filter-drawer.wxml -->
+<view class="drawer-mask {{show ? 'show' : ''}}" bindtap="close"></view>
+<view class="drawer-container {{show ? 'show' : ''}}">
+  <view class="drawer-content">
+    <!-- 开桌日期 -->
+    <view class="section">
+      <view class="section-title">开桌日期</view>
+      <view class="date-picker-group">
+        <picker mode="date" value="{{startDate}}" bindchange="onStartDateChange">
+          <view class="date-input {{startDate ? '' : 'placeholder'}}">{{startDate || '开始日期'}}</view>
+        </picker>
+        <view class="date-separator">至</view>
+        <picker mode="date" value="{{endDate}}" bindchange="onEndDateChange">
+          <view class="date-input {{endDate ? '' : 'placeholder'}}">{{endDate || '结束日期'}}</view>
+        </picker>
+      </view>
+      <view class="quick-btns">
+        <view wx:for="{{dateQuickBtns}}" wx:key="id" class="quick-btn {{item.id === selectedDateBtn ? 'active' : ''}}" bindtap="onDateQuickBtnTap" data-id="{{item.id}}">
+          {{item.name}}
+        </view>
+        <view class="quick-btn clear-btn" bindtap="clearDates">清除</view>
+      </view>
+    </view>
+
+    <!-- 输赢类型 -->
+    <view class="section">
+      <view class="section-title">输赢类型</view>
+      <view class="tab-group">
+        <view wx:for="{{winLossTypes}}" wx:key="id" class="tab-item {{selectedWinLoss === item.id ? 'active' : ''}}" bindtap="onWinLossTap" data-id="{{item.id}}">
+          {{item.name}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 计分模式 -->
+    <view class="section">
+      <view class="section-title">计分模式</view>
+      <view class="tab-group">
+        <view wx:for="{{gameModes}}" wx:key="id" class="tab-item {{selectedMode === item.id ? 'active' : ''}}" bindtap="onModeTap" data-id="{{item.id}}">
+          {{item.name}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 标签 -->
+    <view class="section">
+      <view class="section-title">标签</view>
+      <view class="label-empty">暂无标签</view>
+    </view>
+  </view>
+
+  <!-- 底部按钮 -->
+  <view class="drawer-footer">
+    <button class="footer-btn reset-btn" bindtap="reset">重置</button>
+    <button class="footer-btn confirm-btn" bindtap="confirm">确定</button>
+  </view>
+</view>

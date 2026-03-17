@@ -10,7 +10,7 @@
 </view>
 
 <!-- 中间：当前计分卡片 -->
-<play-game />
+<play-game players="{{currentGame.players}}" startTime="{{currentGame.startTime}}" duration="{{currentGame.duration}}" />
 
 <!-- 底部广告位 -->
 <view class="ad-container">

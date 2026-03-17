@@ -1,0 +1,63 @@
+<!-- pages/rank-list/rank-list.wxml -->
+<view class="container">
+  <!-- 顶部筛选 -->
+  <view class="filter-section">
+    <view class="filter-row date-filter">
+      <text class="label">日期范围</text>
+      <view class="options">
+        <text class="option {{dateRange === '30' ? 'active' : ''}}" bindtap="onDateChange" data-range="30">近30日</text>
+        <text class="option {{dateRange === '90' ? 'active' : ''}}" bindtap="onDateChange" data-range="90">近90日</text>
+        <text class="option {{dateRange === 'custom' ? 'active' : ''}}" bindtap="onDateChange" data-range="custom">自定义 <text class="arrow">▼</text></text>
+      </view>
+    </view>
+    <view class="filter-row tag-filter">
+      <text class="label">标签</text>
+      <text class="tag-empty">暂无标签</text>
+    </view>
+  </view>
+
+  <!-- 统计信息 -->
+  <view class="summary-info">
+    <text>共计 2 局计分</text>
+    <text class="close-btn" bindtap="closeRank">关闭战绩榜</text>
+  </view>
+
+  <!-- 排序控制 -->
+  <view class="sort-control">
+    <view class="sort-left">
+      <text class="sort-active">按合计总分排序</text>
+      <text class="arrow">▼</text>
+    </view>
+    <view class="sort-right">
+      <text>从高到低</text>
+      <icon name="zhexiantu" size="{{14}}" color="#52c41a" />
+    </view>
+  </view>
+
+  <!-- 表头 -->
+  <view class="rank-header">
+    <text class="col-rank">玩家</text>
+    <text class="col-count">参与局数</text>
+    <text class="col-score">总分</text>
+  </view>
+
+  <!-- 排名列表 -->
+  <view class="rank-list">
+    <view 
+      wx:for="{{ranks}}" 
+      wx:key="id" 
+      class="rank-item {{item.isHighlight ? 'highlight' : ''}}"
+    >
+      <view class="player-info">
+        <text class="rank-num">{{index + 1}}</text>
+        <view class="avatar-placeholder" style="background-color: {{item.avatarColor}}">
+          <!-- 模拟图片中的头像内容，比如第一个是男生，第二个是猫等 -->
+          <icon wx:if="{{index === 2}}" name="rongqi" size="{{24}}" color="#ccc" />
+        </view>
+        <text class="player-name">{{item.name}}</text>
+      </view>
+      <text class="play-count">{{item.count}}</text>
+      <text class="total-score {{item.totalScore < 0 ? 'negative' : ''}}">{{item.totalScore}}</text>
+    </view>
+  </view>
+</view>

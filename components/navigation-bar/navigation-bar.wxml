@@ -3,7 +3,7 @@
   <view 
     wx:for="{{navItems}}" 
     wx:key="id" 
-    class="tab-item {{active === item.id ? 'active' : ''}}"
+    class="tab-item-bottom-bar {{active === item.id ? 'active' : ''}}"
     bindtap="switchNav"
     data-id="{{item.id}}"
     data-path="{{item.path}}"

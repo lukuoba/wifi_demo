@@ -1,0 +1,171 @@
+/* pages/rank-list/rank-list.wxss */
+.container {
+  background-color: #f8f8f8;
+  min-height: 100vh;
+}
+
+/* 顶部筛选 */
+.filter-section {
+  background-color: #fff;
+  padding: 0 30rpx;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  padding: 30rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.filter-row:last-child {
+  border-bottom: none;
+}
+
+.label {
+  font-size: 28rpx;
+  color: #333;
+  width: 140rpx;
+}
+
+.options {
+  display: flex;
+  gap: 40rpx;
+}
+
+.option {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.option.active {
+  color: #52c41a;
+  font-weight: bold;
+}
+
+.arrow {
+  font-size: 18rpx;
+  margin-left: 4rpx;
+}
+
+.tag-empty {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 统计信息 */
+.summary-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 30rpx;
+  background-color: #f0f9eb;
+  color: #666;
+  font-size: 24rpx;
+}
+
+.close-btn {
+  color: #52c41a;
+}
+
+/* 排序控制 */
+.sort-control {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx 30rpx;
+  background-color: #fff;
+}
+
+.sort-left {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.sort-active {
+  font-size: 26rpx;
+  color: #52c41a;
+}
+
+.sort-right {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  color: #52c41a;
+  font-size: 26rpx;
+}
+
+/* 表头 */
+.rank-header {
+  display: flex;
+  padding: 20rpx 30rpx;
+  background-color: #f2f2f2;
+  color: #666;
+  font-size: 24rpx;
+}
+
+.col-rank { flex: 4; }
+.col-count { flex: 2; text-align: center; }
+.col-score { flex: 2; text-align: right; }
+
+/* 排名列表 */
+.rank-list {
+  background-color: #fff;
+}
+
+.rank-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.rank-item.highlight {
+  background-color: #fff1f0; /* 图片中的高亮色 */
+}
+
+.player-info {
+  flex: 4;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.rank-num {
+  font-size: 24rpx;
+  color: #999;
+  width: 40rpx;
+}
+
+.avatar-placeholder {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 8rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player-name {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.play-count {
+  flex: 2;
+  text-align: center;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.total-score {
+  flex: 2;
+  text-align: right;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.total-score.negative {
+  color: #333; /* 负分在图中也是黑色 */
+}

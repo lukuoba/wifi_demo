@@ -1,0 +1,77 @@
+<!-- pages/record-game/record-game.wxml -->
+<view class="container">
+  <!-- 顶部吸顶筛选模块 -->
+  <view class="sticky-header">
+    <view class="filter-tabs">
+      <view 
+        class="tab-item {{activeTab === 'all' ? 'active' : ''}}" 
+        bindtap="onTabChange" 
+        data-tab="all"
+      >全部</view>
+      <view 
+        class="tab-item {{activeTab === 'in_progress' ? 'active' : ''}}" 
+        bindtap="onTabChange" 
+        data-tab="in_progress"
+      >进行中</view>
+      <view 
+        class="tab-item {{activeTab === 'finished' ? 'active' : ''}}" 
+        bindtap="onTabChange" 
+        data-tab="finished"
+      >已结束</view>
+    </view>
+    <view class="header-btns">
+      <view class="btn-item" bindtap="onFilterTap">
+        <text>筛选</text>
+      </view>
+      <view class="btn-item icon-btn">
+        <icon name="shanchuanniu" size="{{18}}" color="#666" />
+      </view>
+    </view>
+  </view>
+
+  <!-- 筛选抽屉 -->
+  <filter-drawer 
+    show="{{showFilter}}" 
+    bind:close="onFilterClose" 
+    bind:confirm="onFilterConfirm" 
+  />
+
+  <!-- 统计摘要卡片 -->
+  <view class="summary-card">
+    <view class="summary-header">
+      <text class="summary-info">当前筛选共计 {{summary.total}} 条记录</text>
+      <view class="rank-link" bindtap="goToRank">
+        <text>查看战绩榜</text>
+        <icon name="zhexiantu" size="{{14}}" color="#52c41a" />
+      </view>
+    </view>
+    <view class="summary-grid">
+      <view class="summary-row">
+        <view class="summary-item"><text class="label">赢局</text><text class="value">{{summary.win}} 场</text></view>
+        <view class="summary-item"><text class="label">总赢</text><text class="value">{{summary.totalWin}} 分</text></view>
+      </view>
+      <view class="summary-row">
+        <view class="summary-item"><text class="label">输局</text><text class="value">{{summary.loss}} 场</text></view>
+        <view class="summary-item"><text class="label">总输</text><text class="value">{{summary.totalLoss}} 分</text></view>
+      </view>
+      <view class="summary-row">
+        <view class="summary-item"><text class="label">平局</text><text class="value">{{summary.draw}} 场</text></view>
+        <view class="summary-item"><text class="label">总和</text><text class="value">{{summary.totalSum}} 分</text></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 对局列表 -->
+  <view class="game-list">
+    <block wx:for="{{gameList}}" wx:key="id">
+      <play-game 
+        players="{{item.players}}" 
+        startTime="{{item.startTime}}" 
+        duration="{{item.duration}}" 
+      />
+    </block>
+  </view>
+
+  <!-- 底部导航栏 -->
+  <navigation-bar active="record" />
+</view>
