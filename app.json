@@ -4,7 +4,9 @@
     "pages/icon/icon",
     "pages/record-game/record-game",
     "pages/rank-list/rank-list",
-    "pages/game-detail/game-detail"
+    "pages/game-detail/game-detail",
+    "pages/mine/mine",
+    "pages/edit-profile/edit-profile"
   ],
   "window": {
     "navigationBarBackgroundColor": "#fff",

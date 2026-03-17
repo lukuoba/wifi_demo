@@ -1,0 +1,87 @@
+/* pages/mine/mine.wxss */
+.container {
+  background-color: #f8f8f8;
+  min-height: 100vh;
+  padding: 30rpx;
+  box-sizing: border-box;
+}
+
+/* 用户信息卡片 */
+.user-card {
+  background-color: #fff;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.avatar-placeholder {
+  width: 120rpx;
+  height: 120rpx;
+  background-color: #f5f5f5;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nickname {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.edit-btn {
+  background-color: #52c41a;
+  color: #fff;
+  font-size: 26rpx;
+  padding: 0 30rpx;
+  height: 64rpx;
+  line-height: 64rpx;
+  border-radius: 32rpx;
+  margin: 0;
+}
+
+.edit-btn::after {
+  border: none;
+}
+
+/* 功能菜单网格 */
+.menu-grid {
+  background-color: #fff;
+  border-radius: 20rpx;
+  padding: 40rpx 20rpx;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40rpx 0;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+}
+
+.menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.icon-box {
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-name {
+  font-size: 24rpx;
+  color: #666;
+}

@@ -1,0 +1,32 @@
+<!-- pages/mine/mine.wxml -->
+<view class="container">
+  <!-- 用户信息卡片 -->
+  <view class="user-card">
+    <view class="user-info">
+      <view class="avatar-placeholder">
+        <icon name="tidanren" size="{{40}}" color="#ccc" />
+      </view>
+      <text class="nickname">{{userInfo.nickname}}</text>
+    </view>
+    <button class="edit-btn" bindtap="onEditProfile">修改资料</button>
+  </view>
+
+  <!-- 功能菜单网格 -->
+  <view class="menu-grid">
+    <view 
+      wx:for="{{menuItems}}" 
+      wx:key="id" 
+      class="menu-item" 
+      bindtap="onMenuTap" 
+      data-item="{{item}}"
+    >
+      <view class="icon-box">
+        <icon name="{{item.icon}}" size="{{28}}" color="{{item.color}}" />
+      </view>
+      <text class="menu-name">{{item.name}}</text>
+    </view>
+  </view>
+
+  <!-- 底部导航栏 -->
+  <navigation-bar active="mine" />
+</view>

@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "个人中心",
+  "usingComponents": {
+    "icon": "/components/icon/icon",
+    "navigation-bar": "/components/navigation-bar/navigation-bar"
+  }
+}
