@@ -28,6 +28,6 @@
 
   <!-- 保存按钮 -->
   <view class="footer">
-    <button class="save-btn {{canSave ? 'active' : ''}}" bindtap="onSave">保 存</button>
+    <button class="save-btn {{canSave ? 'active' : ''}}" bindtap="onSave">{{mode === 'register' ? '完 成' : '保 存'}}</button>
   </view>
 </view>
