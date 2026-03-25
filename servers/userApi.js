@@ -1,6 +1,7 @@
 // servers/userApi.js
 
-const BASE_URL = 'http://127.0.0.1:3000';
+// const BASE_URL = 'http://127.0.0.1:3000';
+const BASE_URL = 'https://taoyity.cn';
 
 /**
  * 通用请求工具函数

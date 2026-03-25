@@ -24,20 +24,23 @@ App({
         console.log('本地无 Token，执行静默登录...');
         const { code } = await wx.login();
         console.log('获取到的登录凭证:', code);
-        // 3. 发送到后端登录/注册接口 (POST /api/app/user/login)
         const loginRes = await userApi.login(code);
         
         if (loginRes && loginRes.token) {
           // 4. 存储 Token
           wx.setStorageSync('token', loginRes.token);
-          this.handleUserInfo(loginRes.user || loginRes.userInfo);
+          wx.setStorageSync('openid', loginRes.user.openid);
+          if(loginRes.isNewUser){
+              this.handleUserInfo(loginRes.user || loginRes.userInfo);
+          }
         } else {
           throw new Error('登录失败：未返回 Token');
         }
       } else {
         // 5. 有 Token，直接获取/校验用户信息
         console.log('本地有 Token，校验用户信息...');
-        const userInfo = await userApi.getProfile();
+        const openid = wx.getStorageSync('openid');
+        const userInfo = await userApi.getProfile(openid);
         this.handleUserInfo(userInfo);
       }
     } catch (err) {
@@ -52,10 +55,6 @@ App({
   handleUserInfo(userInfo) {
     if (!userInfo) return;
 
-    // 更新全局数据
-    this.globalData.userInfo = userInfo;
-    wx.setStorageSync('userInfo', userInfo);
-
     // 判断是否需要完善资料 (nickname 为空则跳转)
     if (!userInfo.nickname || userInfo.nickname === '') {
       console.log('用户资料不完整，引导至注册/设置页');
@@ -63,7 +62,10 @@ App({
         url: '/pages/edit-profile/edit-profile?mode=register'
       });
     } else {
+    // 更新全局数据
+      this.globalData.userInfo = userInfo;
       this.globalData.isRegistered = true;
+      wx.setStorageSync('userInfo', userInfo);
       console.log('登录成功，进入主页');
     }
   },
