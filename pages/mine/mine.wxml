@@ -4,9 +4,10 @@
   <view class="user-card">
     <view class="user-info">
       <view class="avatar-placeholder">
-        <icon name="tidanren" size="{{40}}" color="#ccc" />
+        <image wx:if="{{userInfo.avatar}}" src="{{userInfo.avatar}}" mode="aspectFill" class="user-avatar"></image>
+        <icon wx:else name="tidanren" size="{{40}}" color="#ccc" />
       </view>
-      <text class="nickname">{{userInfo.nickname}}</text>
+      <text class="nickname">{{userInfo.nickname || '未登录'}}</text>
     </view>
     <button class="edit-btn" bindtap="onEditProfile">修改资料</button>
   </view>

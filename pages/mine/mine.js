@@ -1,10 +1,8 @@
-// pages/mine/mine.js
+const app = getApp();
+
 Page({
   data: {
-    userInfo: {
-      nickname: '瓜呱哇',
-      avatarUrl: '' // 占位
-    },
+    userInfo: null,
     menuItems: [
       { id: 'member', name: '我的会员', icon: 'huiyuanjifen', color: '#f1c40f' },
       { id: 'record', name: '我的战绩', icon: 'zhexiantu', color: '#3498db' },
@@ -12,6 +10,17 @@ Page({
       { id: 'customer', name: '人工客服', icon: 'Icon', color: '#2ecc71' },
       { id: 'share', name: '转发分享', icon: 'shanchuanniu', color: '#1abc9c' }
     ]
+  },
+
+  onShow() {
+    // 每次进入页面时同步最新的用户信息
+    const userInfo = app.globalData.userInfo || wx.getStorageSync('userInfo');
+    console.log('个人中心 onShow，获取用户信息:', userInfo);
+    if (userInfo) {
+      this.setData({
+        userInfo: { ...userInfo } // 创建新引用，强制触发视图更新
+      });
+    }
   },
 
   onEditProfile() {

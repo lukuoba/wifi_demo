@@ -55,7 +55,7 @@
   gap: 20rpx;
 }
 
-.btn-wechat, .btn-choose {
+.btn-choose {
   margin: 0;
   padding: 0 24rpx;
   height: 70rpx;
@@ -64,18 +64,13 @@
   border-radius: 8rpx;
 }
 
-.btn-wechat {
-  background-color: #52c41a;
-  color: #fff;
-}
-
 .btn-choose {
   background-color: #fff;
   color: #52c41a;
   border: 1rpx solid #52c41a;
 }
 
-.btn-wechat::after, .btn-choose::after {
+.btn-choose::after {
   border: none;
 }
 
@@ -119,4 +114,34 @@
 
 .save-btn::after {
   border: none;
+}
+
+/* 协议部分样式 */
+.protocol-section {
+  margin-top: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.protocol-label {
+  display: flex;
+  align-items: center;
+}
+
+.protocol-text {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.protocol-link {
+  font-size: 24rpx;
+  color: #52c41a;
+}
+
+/* 缩小勾选框 */
+checkbox .wx-checkbox-input {
+  width: 30rpx;
+  height: 30rpx;
 }

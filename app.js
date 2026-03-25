@@ -74,8 +74,10 @@ App({
    * 设置用户信息并持久化 (供修改资料后调用)
    */
   setUserInfo(userInfo) {
-    this.globalData.userInfo = userInfo;
-    this.globalData.isRegistered = !!userInfo.nickname;
-    wx.setStorageSync('userInfo', userInfo);
+    // 使用对象合并，防止丢失原有字段（如 openid）
+    this.globalData.userInfo = { ...(this.globalData.userInfo || {}), ...userInfo };
+    this.globalData.isRegistered = !!this.globalData.userInfo.nickname;
+    wx.setStorageSync('userInfo', this.globalData.userInfo);
+    console.log('全局用户信息已更新:', this.globalData.userInfo);
   }
 })

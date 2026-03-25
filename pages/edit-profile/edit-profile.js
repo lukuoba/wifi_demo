@@ -7,6 +7,7 @@ Page({
     avatarUrl: '',
     nickname: '',
     canSave: false,
+    isAgreed: false,
     mode: 'edit' // edit 或 register
   },
 
@@ -21,34 +22,32 @@ Page({
 
     // 如果是编辑模式，初始化现有数据
     if (mode === 'edit' && app.globalData.userInfo) {
-      const { nickname, avatarUrl } = app.globalData.userInfo;
-      this.setData({ nickname, avatarUrl });
+      const { nickname, avatar } = app.globalData.userInfo;
+      this.setData({ 
+        nickname, 
+        avatarUrl: avatar || '',
+        canSave: nickname.trim().length > 0
+      });
     }
   },
 
-  // 获取微信头像和昵称
-  getWechatUserInfo() {
-    wx.getUserProfile({
-      desc: '用于完善会员资料',
-      success: (res) => {
-        this.setData({
-          avatarUrl: res.userInfo.avatarUrl,
-          nickname: res.userInfo.nickName,
-          canSave: true
-        });
-      },
-      fail: (err) => {
-        console.error('获取用户信息失败', err);
-      }
+  // 统一校验是否可保存
+  checkCanSave() {
+    const { nickname } = this.data;
+    const isNicknameValid = nickname && nickname.trim().length > 0;
+    this.setData({
+      canSave: isNicknameValid
     });
   },
 
   // 选择本地头像
   onChooseAvatar(e) {
     const { avatarUrl } = e.detail;
+    console.log('本地头像',avatarUrl)
     this.setData({
-      avatarUrl,
-      canSave: true
+      avatarUrl
+    }, () => {
+      this.checkCanSave();
     });
   },
 
@@ -56,9 +55,29 @@ Page({
   onNicknameInput(e) {
     const value = e.detail.value;
     this.setData({
-      nickname: value,
-      canSave: value.trim().length > 0
+      nickname: value
+    }, () => {
+      this.checkCanSave();
     });
+  },
+
+  // 协议勾选监听
+  onAgreeChange(e) {
+    this.setData({
+      isAgreed: e.detail.value.length > 0
+    });
+  },
+
+  // 跳转到用户使用协议
+  goToUserAgreement() {
+    wx.showToast({ title: '跳转用户协议', icon: 'none' });
+    // 实际代码：wx.navigateTo({ url: '/pages/protocol/user-agreement' });
+  },
+
+  // 跳转到隐私协议
+  goToPrivacyPolicy() {
+    wx.showToast({ title: '跳转隐私协议', icon: 'none' });
+    // 实际代码：wx.navigateTo({ url: '/pages/protocol/privacy-policy' });
   },
 
   /**
@@ -66,21 +85,30 @@ Page({
    */
   async onSave() {
     if (!this.data.canSave) return;
+    
+    // 如果是注册模式，必须勾选协议
+    if (this.data.mode === 'register' && !this.data.isAgreed) {
+      wx.showToast({
+        title: '请阅读并勾选协议',
+        icon: 'none'
+      });
+      return;
+    }
 
     try {
       wx.showLoading({ title: this.data.mode === 'register' ? '注册中...' : '保存中...' });
       
-      // 1. 如果头像发生变化（且不是网络链接），上传头像
+      // 1. 如果头像发生变化（且是小程序临时路径），上传到京东云 OSS
       let finalAvatarUrl = this.data.avatarUrl;
-      if (finalAvatarUrl && !finalAvatarUrl.startsWith('http')) {
+      if (finalAvatarUrl && (finalAvatarUrl.startsWith('http://tmp/') || finalAvatarUrl.startsWith('wxfile://'))) {
         const uploadRes = await userApi.uploadAvatar(finalAvatarUrl);
         finalAvatarUrl = uploadRes.url;
       }
-
+      console.log('finalAvatarUrl', finalAvatarUrl)
       // 2. 同步用户信息到后端
       const res = await userApi.updateProfile({
         nickname: this.data.nickname,
-        avatarUrl: finalAvatarUrl
+        avatar: finalAvatarUrl
       });
 
       if (res && (res.id || res.success)) {
@@ -88,7 +116,7 @@ Page({
         const newUserInfo = {
           userId: res.id || res.userId,
           nickname: this.data.nickname,
-          avatarUrl: finalAvatarUrl
+          avatar: finalAvatarUrl
         };
         app.setUserInfo(newUserInfo);
 
