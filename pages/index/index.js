@@ -1,4 +1,5 @@
 const { getWifiInfo } = require("../../servers/wifiApi");
+const userApi = require("../../servers/userApi");
 
 Page({
   data: {
@@ -9,6 +10,9 @@ Page({
     versionNum: 0,
     isAndroid: false,
     isDevtools: false,
+    showTagModal: false, // 控制标签选择弹窗的显示隐藏
+    tags: [],            // 存储获取到的所有标签
+    selectedTags: null,    // 存储用户已选择的标签
     currentGame: {
       players: [
         { id: 1, name: '我', score: 850, isOwner: false },
@@ -61,12 +65,7 @@ Page({
         });
         break;
       case 2:
-        this.setData({
-          wifiInfo: {
-            SSID: "多人记分局",
-            password: "12345678",
-          },
-        });
+        this.showTagSelectionModal();
         break;
       case 3:
         this.setData({
@@ -293,5 +292,45 @@ Page({
         },
       });
     }, 1500); // 延迟1.5秒：适配不同机型的连接响应速度
+  },
+
+  // 显示标签选择弹窗并获取标签
+  async showTagSelectionModal() {
+    this.setData({ showTagModal: true, selectedTags: null }); // 打开弹窗时清空已选标签
+    wx.showLoading({ title: '加载标签中...' });
+    try {
+      const tags = await userApi.getTags();
+      this.setData({ tags: tags || [] }); // 假设返回的是标签数组
+    } catch (error) {
+      console.error('获取标签失败', error);
+      wx.showToast({ title: '获取标签失败', icon: 'none' });
+    } finally {
+      wx.hideLoading();
+    }
+  },
+
+  // 关闭标签选择弹窗
+  onCancelTagSelection() {
+    this.setData({ showTagModal: false });
+  },
+
+  // 确认标签选择并立即开局
+  onConfirmTagSelection() {
+    console.log('选择的标签:', this.data.selectedTags);
+    wx.showToast({ title: '立即开局，选择的标签:' + JSON.stringify(this.data.selectedTags), icon: 'none' });
+    // TODO: 在这里执行跳转到游戏页面的逻辑，并传递 selectedTags
+    this.setData({ showTagModal: false });
+  },
+
+  // 标签点击事件，用于选择/取消选择
+  onTagTap(e) {
+    const tagId = String(e.currentTarget.dataset.id); // Ensure it's a string
+    console.log('点击的标签ID', tagId);
+    const newSelectedTags = this.data.selectedTags === tagId ? null : tagId;
+    console.log('newSelectedTags', newSelectedTags);
+    this.setData({
+      selectedTags: newSelectedTags,
+      tags: [...this.data.tags] // 创建新数组引用，强制刷新tags数组触发视图更新
+    });
   },
 });

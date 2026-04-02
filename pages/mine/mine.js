@@ -8,7 +8,8 @@ Page({
       { id: 'record', name: '我的战绩', icon: 'zhexiantu', color: '#3498db' },
       { id: 'rank', name: '战绩榜', icon: 'jilu', color: '#e67e22' },
       { id: 'customer', name: '人工客服', icon: 'Icon', color: '#2ecc71' },
-      { id: 'share', name: '转发分享', icon: 'shanchuanniu', color: '#1abc9c' }
+      { id: 'share', name: '转发分享', icon: 'shanchuanniu', color: '#1abc9c' },
+      { id: 'mark-pen-line', name: '标签管理', icon: 'mark-pen-line', color: '#e74c3c' },
     ]
   },
 

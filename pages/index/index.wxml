@@ -22,4 +22,27 @@
 
 <navigation-bar active="home" />
 
+<!-- 标签选择弹窗 -->
+<view class="tag-modal-container" wx:if="{{showTagModal}}">
+  <view class="tag-modal-mask" bindtap="onCancelTagSelection"></view>
+  <view class="tag-modal-content">
+    <view class="modal-title">可选标签进行开局</view>
+    <view class="tag-list">
+      <view
+        wx:for="{{tags}}"
+        wx:key="id"
+        class="tag-item {{selectedTags == item.id ? 'selected' : ''}}"
+        bindtap="onTagTap"
+        data-id="{{item.id}}"
+      >
+        {{item.name}}
+      </view>
+    </view>
+    <view class="modal-buttons">
+      <button class="modal-btn cancel-btn" bindtap="onCancelTagSelection">取消</button>
+      <button class="modal-btn confirm-btn" bindtap="onConfirmTagSelection">立即开局</button>
+    </view>
+  </view>
+</view>
+
 </view>

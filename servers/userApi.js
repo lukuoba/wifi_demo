@@ -60,7 +60,10 @@ module.exports = {
   updateProfile: (data) => {
     return request('/app/profile', 'PUT', data);
   },
-
+  // 获取所有标签 (GET /app/tag)
+  getTags: () => {
+    return request('/app/tag', 'GET');
+  },
   /**
    * 上传头像到京东云 OSS
    * @param {string} tempFilePath 小程序临时文件路径
