@@ -3,8 +3,8 @@
   <!-- 头部信息 -->
   <view class="card-header">
     <view class="header-left">
-      <text class="game-title">多人计分桌</text>
-      <text class="game-status">进行中</text>
+      <text class="game-title">{{gameModeText}}</text>
+      <text class="game-status {{gameStatusText === '已结束' ? 'status-finished' : ''}}">{{gameStatusText}}</text>
     </view>
     <view class="header-actions">
       <view class="action-icon">

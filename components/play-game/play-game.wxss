@@ -31,6 +31,10 @@
   color: #4cd964;
 }
 
+.game-status.status-finished {
+  color: #ff4d4f;
+}
+
 .header-actions {
   display: flex;
 }

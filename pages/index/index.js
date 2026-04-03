@@ -1,6 +1,8 @@
 const { getWifiInfo } = require("../../servers/wifiApi");
 const userApi = require("../../servers/userApi");
 
+const app = getApp(); // 获取小程序实例
+
 Page({
   data: {
     wifiId:null,
@@ -13,6 +15,7 @@ Page({
     showTagModal: false, // 控制标签选择弹窗的显示隐藏
     tags: [],            // 存储获取到的所有标签
     selectedTags: null,    // 存储用户已选择的标签
+    currentMode: null,     // 存储当前开局模式
     currentGame: {
       players: [
         { id: 1, name: '我', score: 850, isOwner: false },
@@ -23,17 +26,17 @@ Page({
       duration: '2小时15分'
     },
     selectCard: [{
-      id:1,
+      id:'single',
       name:"单人记分局",
       des:"一人记分整局",
       icon:'tidanren'
     },{
-      id:2,
+      id:'multi',
       name:"多人记分局",
       des:"多人同时记分",
       icon:'duoren'
     },{
-      id:3,
+      id:'pool',
       name:"分数池局",
       des:"所有玩家将分数加入分池",
       icon:'rongqi'
@@ -53,10 +56,32 @@ Page({
     });
   },
 
+  onShow() {
+    if (app.globalData.isRegistered) {
+      this.getLatestGameRecord();
+    } else {
+      console.log('用户未登录或未注册，不加载最新对局记录。');
+      this.setData({ currentMode: null });
+    }
+  },
+
+  async getLatestGameRecord() {
+    try {
+      const gameList = await userApi.getGameList();
+      if (gameList && gameList.length > 0) {
+        this.setData({ currentMode: gameList[0] });
+      } else {
+        this.setData({ currentMode: null });
+      }
+    } catch (error) {
+      this.setData({ currentMode: null });
+    }
+  },
+
   selectCard(e){
     const id = e.currentTarget.dataset.name.id
     switch(id){
-      case 1:
+      case 'single':
         this.setData({
           wifiInfo: {
             SSID: "单人记分局",
@@ -64,10 +89,10 @@ Page({
           },
         });
         break;
-      case 2:
-        this.showTagSelectionModal();
+      case 'multi':
+        this.showTagSelectionModal('multi');
         break;
-      case 3:
+      case 'pool':
         this.setData({
           wifiInfo: {
             SSID: "分数池局",
@@ -295,8 +320,8 @@ Page({
   },
 
   // 显示标签选择弹窗并获取标签
-  async showTagSelectionModal() {
-    this.setData({ showTagModal: true, selectedTags: null }); // 打开弹窗时清空已选标签
+  async showTagSelectionModal(mode) {
+    this.setData({ showTagModal: true, selectedTags: null, currentMode: mode }); // 打开弹窗时清空已选标签，并设置当前模式
     wx.showLoading({ title: '加载标签中...' });
     try {
       const tags = await userApi.getTags();
@@ -311,19 +336,52 @@ Page({
 
   // 关闭标签选择弹窗
   onCancelTagSelection() {
-    this.setData({ showTagModal: false });
+    this.setData({ showTagModal: false, selectedTags: null, currentMode: null });
   },
 
-  // 确认标签选择并立即开局
-  onConfirmTagSelection() {
-    console.log('选择的标签:', this.data.selectedTags);
-    wx.showToast({ title: '立即开局，选择的标签:' + JSON.stringify(this.data.selectedTags), icon: 'none' });
-    // TODO: 在这里执行跳转到游戏页面的逻辑，并传递 selectedTags
-    this.setData({ showTagModal: false });
+  async onConfirmTagSelection() {
+    const selectedTagId = this.data.selectedTags; // 获取当前选中的tagId (可能是null)
+    const mode = this.data.currentMode; // 从data中获取当前开局模式
+
+    // 准备发送给接口的数据
+    const requestData = { mode };
+    if (selectedTagId) {
+      requestData.tagId = selectedTagId;
+    }
+
+    wx.showLoading({ title: '开局中...' });
+    try {
+      const result = await userApi.immediateStart(requestData);
+      console.log('立即开局成功', result);
+      if(result){
+        wx.navigateTo({
+          url: '/pages/game-detail/game-detail?gameId=' + result.id,
+        });
+      }
+      wx.showToast({ title: '开局成功', icon: 'success' });
+      // TODO: 在这里执行跳转到游戏页面的逻辑，并传递 result
+    } catch (error) {
+      console.error('立即开局失败', error);
+      wx.showToast({ title: error.message || '开局失败', icon: 'none' });
+    } finally {
+      wx.hideLoading();
+      this.setData({ showTagModal: false }); // 无论成功失败，都关闭弹窗
+    }
   },
 
-  // 标签点击事件，用于选择/取消选择
-  onTagTap(e) {
+  // 导航到对局详情页
+  navigateToGameDetail() {
+    if (this.data.currentMode && this.data.currentMode.id) {
+      wx.navigateTo({
+        url: '/pages/game-detail/game-detail?gameId=' + this.data.currentMode.id,
+      });
+    } else {
+      wx.showToast({ title: '没有最新对局记录', icon: 'none' });
+    }
+  },
+
+  // 关闭标签选择弹窗
+  onCancelTagSelection() {
     const tagId = String(e.currentTarget.dataset.id); // Ensure it's a string
     console.log('点击的标签ID', tagId);
     const newSelectedTags = this.data.selectedTags === tagId ? null : tagId;

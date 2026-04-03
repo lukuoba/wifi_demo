@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "麻将计分神器",
+  "navigationBarTitleText": "对局详情",
   "usingComponents": {
     "icon": "/components/icon/icon"
   }

@@ -198,6 +198,70 @@
   flex-direction: column;
 }
 
+/* 最新对局记录样式 */
+.latest-game-record {
+  background: #1e1e1e;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 40rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
+  color: #f0f0f0;
+}
+
+.record-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.record-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+.record-id {
+  font-size: 24rpx;
+  color: #888;
+}
+
+.record-content {
+  margin-bottom: 20rpx;
+  font-size: 28rpx;
+  color: #ccc;
+  display: flex;
+  flex-direction: column;
+}
+
+.record-time,
+.record-duration {
+  margin-bottom: 8rpx;
+}
+
+.record-players {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-bottom: 20rpx;
+}
+
+.record-players text {
+  background-color: #333;
+  padding: 8rpx 16rpx;
+  border-radius: 10rpx;
+  font-size: 24rpx;
+  color: #eee;
+}
+
+.view-detail {
+  color: #4285f4;
+  font-size: 26rpx;
+  text-align: right;
+  display: block;
+  margin-top: 20rpx;
+}
+
 .modal-title {
   font-size: 36rpx;
   font-weight: bold;

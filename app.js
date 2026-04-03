@@ -31,7 +31,9 @@ App({
           wx.setStorageSync('token', loginRes.token);
           wx.setStorageSync('openid', loginRes.user.openid);
           if(loginRes.isNewUser){
-              this.handleUserInfo(loginRes.user || loginRes.userInfo);
+            this.handleUserInfo(loginRes.user || loginRes.userInfo);
+          } else {
+            this.handleUserInfo(loginRes.user || loginRes.userInfo);
           }
         } else {
           throw new Error('登录失败：未返回 Token');
@@ -63,10 +65,17 @@ App({
       });
     } else {
     // 更新全局数据
+      console.log('app.js: globalData.isRegistered set to true');
+      console.log('app.js: handleUserInfo setting isRegistered to true');
       this.globalData.userInfo = userInfo;
       this.globalData.isRegistered = true;
       wx.setStorageSync('userInfo', userInfo);
-      console.log('登录成功，进入主页');
+      console.log('app.js: 登录成功，准备进入主页或刷新主页内容');
+      console.log('app.js: handleUserInfo about to call wx.reLaunch to /pages/index/index');
+      wx.reLaunch({
+        url: '/pages/index/index'
+      });
+      console.log('app.js: wx.reLaunch called in handleUserInfo.');
     }
   },
 

@@ -53,16 +53,31 @@ module.exports = {
 
   // 2. 获取用户资料 (GET /app/profile)
   getProfile: () => {
-    return request('/app/profile', 'GET');
+    return request('/app/user/profile', 'GET');
   },
 
   // 3. 更新用户资料 (PUT /app/profile)
   updateProfile: (data) => {
-    return request('/app/profile', 'PUT', data);
+    return request('/app/user/profile', 'PUT', data);
   },
   // 获取所有标签 (GET /app/tag)
   getTags: () => {
     return request('/app/tag', 'GET');
+  },
+
+  // 立即开局 (POST /app/game/create)
+  immediateStart: (data) => {
+    return request('/app/game/create', 'POST', data);
+  },
+
+  // 获取对局详情 (GET /app/game/:id)
+  getGameDetails: (gameId) => {
+    return request(`/app/game/${gameId}`, 'GET');
+  },
+
+  // 获取对局列表 (GET /app/game/list)
+  getGameList: () => {
+    return request('/app/game/list', 'GET');
   },
   /**
    * 上传头像到京东云 OSS

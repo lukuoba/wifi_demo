@@ -17,7 +17,7 @@
   <!-- 玩家列表 -->
   <view class="player-list">
     <view 
-      wx:for="{{players}}" 
+      wx:for="{{gameDetails.players || players}}" 
       wx:key="id" 
       class="player-card"
     >
