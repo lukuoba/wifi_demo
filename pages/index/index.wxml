@@ -1,48 +1,168 @@
-<!-- 主容器 -->
+<!-- 首页 -->
 <view class="page-container">
 
-<!-- 2×2 功能卡片 -->
-<view class="grid-box">
-  <view class="card-item" wx:for="{{selectCard}}"  wx:key="index"  data-name="{{item}}" bindtap="selectCard">
-    <icon name="{{item.icon}}" size="{{40}}" color="#fff"/>
-    <text class="card-text">{{item.name}}</text>
+  <!-- 顶部品牌栏（自定义导航） -->
+  <view class="custom-nav" style="padding-top: {{statusBarHeight}}px; height: {{navBarHeight}}px;">
+    <view class="nav-inner">
+      <view class="brand-mark">雀</view>
+      <text class="brand-title">乐记 · 雀神计分</text>
+    </view>
   </view>
-</view>
 
-<!-- 中间：当前计分卡片 -->
-<play-game players="{{currentGame.players}}" currentMode="{{currentMode}}" />
+  <view class="page-content">
 
-<!-- 底部广告位 -->
-<view class="ad-container">
-  <view class="ad-label">赞助内容</view>
-  <view class="ad-content">
-    <text>观看视频广告解锁高级功能</text>
-  </view>
-</view>
+    <!-- 快速开桌 -->
+    <view class="section">
+      <view class="section-head">
+        <view class="section-title">
+          <view class="section-bar"></view>
+          <text>快速开桌</text>
+        </view>
+        <text class="section-link" bindtap="onRulesTap">规则说明</text>
+      </view>
 
-<navigation-bar active="home" />
+      <view class="launch-grid">
+        <!-- 多人计分桌 -->
+        <view class="launch-main" data-id="multi" bindtap="selectCard" hover-class="card-hover">
+          <view class="classic-badge">经典</view>
+          <view class="launch-main-body">
+            <view class="launch-icon">
+              <icon name="duoren" size="{{20}}" color="#059669" />
+            </view>
+            <text class="launch-title">多人计分桌</text>
+            <view class="launch-desc">
+              <text>全员扫码联机</text>
+              <text>实时同步确认</text>
+            </view>
+          </view>
+          <view class="launch-cta">
+            <text>立即开局</text>
+            <text class="cta-arrow">›</text>
+          </view>
+        </view>
 
-<!-- 标签选择弹窗 -->
-<view class="tag-modal-container" wx:if="{{showTagModal}}">
-  <view class="tag-modal-mask" bindtap="onCancelTagSelection"></view>
-  <view class="tag-modal-content">
-    <view class="modal-title">可选标签进行开局</view>
-    <view class="tag-list">
-      <view
-        wx:for="{{tags}}"
-        wx:key="id"
-        class="tag-item {{selectedTags == item.id ? 'selected' : ''}}"
-        bindtap="onTagTap"
-        data-id="{{item.id}}"
-      >
-        {{item.name}}
+        <!-- 右侧两种模式 -->
+        <view class="launch-side">
+          <view class="launch-small" data-id="single" bindtap="selectCard" hover-class="card-hover">
+            <view class="launch-small-text">
+              <text class="launch-small-title">单人计分桌</text>
+              <text class="launch-small-desc">房主一人记分全桌同步</text>
+            </view>
+            <view class="launch-icon-small">
+              <icon name="tidanren" size="{{16}}" color="#475569" />
+            </view>
+          </view>
+
+          <view class="launch-small" data-id="pool" bindtap="selectCard" hover-class="card-hover">
+            <view class="launch-small-text">
+              <text class="launch-small-title">分数池桌</text>
+              <text class="launch-small-desc">各自从底池给付结算</text>
+            </view>
+            <view class="launch-icon-small">
+              <icon name="rongqi" size="{{16}}" color="#475569" />
+            </view>
+          </view>
+        </view>
       </view>
     </view>
-    <view class="modal-buttons">
-      <button class="modal-btn cancel-btn" bindtap="onCancelTagSelection">取消</button>
-      <button class="modal-btn confirm-btn" bindtap="onConfirmTagSelection">立即开局</button>
+
+    <!-- 最近一桌 -->
+    <view class="section">
+      <view class="section-head">
+        <view class="section-title">
+          <view class="section-bar"></view>
+          <text>最近一桌</text>
+        </view>
+        <text class="section-link" bindtap="goToRecord">全部记录</text>
+      </view>
+
+      <view wx:if="{{latestGame}}" class="game-card" bindtap="navigateToGameDetail">
+        <view class="game-card-head">
+          <view class="game-head-left">
+            <text class="game-mode">{{latestGame.modeText}}</text>
+            <view class="status-pill {{latestGame.status === 'active' ? 'is-active' : ''}}">
+              <view class="status-dot {{latestGame.status === 'active' ? 'is-active' : ''}}">
+                <view wx:if="{{latestGame.status === 'active'}}" class="status-dot-ping"></view>
+              </view>
+              <text>{{latestGame.statusText}}</text>
+            </view>
+          </view>
+          <view class="game-actions">
+            <view class="game-action" catchtap="onTrendTap">
+              <icon name="zhexiantu" size="{{16}}" color="#94a3b8" />
+            </view>
+            <view class="game-action" catchtap="onSettleTap">
+              <icon name="guanbianniu-copy" size="{{16}}" color="#94a3b8" />
+            </view>
+            <view class="game-action" catchtap="onManageTap">
+              <icon name="shanchuanniu" size="{{16}}" color="#94a3b8" />
+            </view>
+          </view>
+        </view>
+
+        <view class="player-row">
+          <view class="player" wx:for="{{latestGame.players}}" wx:key="id">
+            <view class="avatar-wrap">
+              <image wx:if="{{item.avatar}}" class="avatar-img" src="{{item.avatar}}" mode="aspectFill"></image>
+              <view wx:else class="avatar-fallback" style="background: {{item.avatarColor}};">
+                {{item.avatarText}}
+              </view>
+              <view wx:if="{{item.isOwner}}" class="avatar-badge owner-badge">房主</view>
+              <view wx:if="{{item.isWinner}}" class="avatar-badge win-badge">胜</view>
+            </view>
+            <text class="player-name {{item.isWinner ? 'is-winner' : ''}}">{{item.name}}</text>
+            <text class="player-score {{item.scoreClass}}">{{item.scoreText}}</text>
+          </view>
+          <view wx:if="{{!latestGame.players.length}}" class="players-empty">暂无玩家数据</view>
+        </view>
+
+        <view class="game-card-foot">
+          <view class="game-meta">
+            <view class="clock-icon"></view>
+            <text>{{latestGame.metaText}}</text>
+          </view>
+          <view class="enter-game" catchtap="navigateToGameDetail">
+            <text>进桌记分</text>
+            <text class="cta-arrow small">›</text>
+          </view>
+        </view>
+      </view>
+
+      <view wx:else class="game-empty">
+        <view class="empty-icon">
+          <icon name="duoren" size="{{24}}" color="#10b981" />
+        </view>
+        <text class="empty-title">还没有进行中的对局</text>
+        <text class="empty-desc">开一桌，和牌友一起记分</text>
+        <view class="empty-btn" data-id="multi" catchtap="selectCard">立即开桌</view>
+      </view>
+    </view>
+
+  </view>
+
+  <!-- 标签选择弹窗 -->
+  <view class="tag-modal-container" wx:if="{{showTagModal}}">
+    <view class="tag-modal-mask" bindtap="onCancelTagSelection"></view>
+    <view class="tag-modal-content">
+      <view class="modal-title">可选标签进行开局</view>
+      <view wx:if="{{tags.length}}" class="tag-list">
+        <view
+          wx:for="{{tags}}"
+          wx:key="id"
+          class="tag-item {{selectedTags === item.id ? 'selected' : ''}}"
+          bindtap="onTagTap"
+          data-id="{{item.id}}"
+        >
+          {{item.name}}
+        </view>
+      </view>
+      <view wx:else class="tag-empty">暂无可选标签，可直接开局</view>
+      <view class="modal-buttons">
+        <button class="modal-btn cancel-btn" bindtap="onCancelTagSelection">取消</button>
+        <button class="modal-btn confirm-btn" bindtap="onConfirmTagSelection">立即开局</button>
+      </view>
     </view>
   </view>
-</view>
 
+  <navigation-bar active="home" />
 </view>

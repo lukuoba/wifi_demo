@@ -1,5 +1,7 @@
 {
-  "navigationBarTitleText": "对局详情",
+  "navigationStyle": "custom",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#F6F8F7",
   "usingComponents": {
     "icon": "/components/icon/icon"
   }

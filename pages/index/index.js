@@ -12,40 +12,19 @@ Page({
     versionNum: 0,
     isAndroid: false,
     isDevtools: false,
+    statusBarHeight: 20,
+    navBarHeight: 44,
     showTagModal: false, // 控制标签选择弹窗的显示隐藏
     tags: [],            // 存储获取到的所有标签
     selectedTags: null,    // 存储用户已选择的标签
-    currentMode: null,     // 存储当前开局模式
-    currentGame: {
-      players: [
-        { id: 1, name: '我', score: 850, isOwner: false },
-        { id: 2, name: 'Dragunov', score: -240, isOwner: false },
-        { id: 3, name: 'Sarah', score: -610, isOwner: false }
-      ],
-      startTime: '26-03-16 12:00',
-      duration: '2小时15分'
-    },
-    selectCard: [{
-      id:'single',
-      name:"单人记分局",
-      des:"一人记分整局",
-      icon:'tidanren'
-    },{
-      id:'multi',
-      name:"多人记分局",
-      des:"多人同时记分",
-      icon:'duoren'
-    },{
-      id:'pool',
-      name:"分数池局",
-      des:"所有玩家将分数加入分池",
-      icon:'rongqi'
-    },{
-      id:4,
-      name:"立即连wifi",
-      des:"连接当前 wifi",
-      icon:'wifi'
-    }]
+    currentMode: null,     // 存储最近一局数据
+    pendingMode: null,     // 存储待开局的模式
+    latestGame: null,      // 首页最近一桌的展示数据
+    todayStats: [
+      { label: '累计局数', value: '18', unit: '局', tone: '' },
+      { label: '胜率表现', value: '62.5%', unit: '', tone: 'is-success' },
+      { label: '最高番数', value: '清十八罗汉', unit: '', tone: 'is-warning' }
+    ]
   },
 
   onLoad(options) {
@@ -54,6 +33,23 @@ Page({
     this.setData({
       wifiId: options.wifiId||null,
     });
+    this.updateNavBarMetrics();
+  },
+
+  // 计算自定义导航栏高度，适配不同机型状态栏与胶囊
+  updateNavBarMetrics() {
+    const windowInfo = wx.getWindowInfo ? wx.getWindowInfo() : {};
+    const statusBarHeight = windowInfo.statusBarHeight || 20;
+    let navBarHeight = 44;
+    try {
+      const menuButton = wx.getMenuButtonBoundingClientRect();
+      if (menuButton && menuButton.height && menuButton.top) {
+        navBarHeight = (menuButton.top - statusBarHeight) * 2 + menuButton.height;
+      }
+    } catch (error) {
+      console.error('获取胶囊位置失败', error);
+    }
+    this.setData({ statusBarHeight, navBarHeight });
   },
 
   onShow() {
@@ -61,47 +57,107 @@ Page({
       this.getLatestGameRecord();
     } else {
       console.log('用户未登录或未注册，不加载最新对局记录。');
-      this.setData({ currentMode: null });
+      this.setData({ currentMode: null, latestGame: null });
     }
   },
 
   async getLatestGameRecord() {
     try {
       const gameList = await userApi.getGameList();
-      if (gameList && gameList.length > 0) {
-        this.setData({ currentMode: gameList[0] });
-      } else {
-        this.setData({ currentMode: null });
+      const latest = gameList && gameList.length > 0 ? gameList[0] : null;
+      if (!latest) {
+        this.setData({ currentMode: null, latestGame: null });
+        return;
+      }
+
+      this.setData({ currentMode: latest });
+      this.buildLatestGame(latest);
+
+      // 列表接口未返回玩家数据时，再拉取对局详情补全展示
+      if (latest.id && (!latest.players || latest.players.length === 0)) {
+        try {
+          const detail = await userApi.getGameDetails(latest.id);
+          if (detail) {
+            const merged = { ...latest, ...detail };
+            this.setData({ currentMode: merged });
+            this.buildLatestGame(merged);
+          }
+        } catch (error) {
+          console.error('获取最近一桌详情失败', error);
+        }
       }
     } catch (error) {
-      this.setData({ currentMode: null });
+      this.setData({ currentMode: null, latestGame: null });
     }
   },
 
+  // 组装“最近一桌”的展示数据
+  buildLatestGame(game) {
+    if (!game) {
+      this.setData({ latestGame: null });
+      return;
+    }
+
+    const modeMap = {
+      multi: '多人计分桌',
+      single: '单人计分桌',
+      pool: '分数池桌'
+    };
+    const avatarColors = ['#059669', '#475569', '#b45309', '#be123c', '#4338ca'];
+
+    const players = (game.players || []).map((player, index) => {
+      const score = Number(player.score) || 0;
+      const name = player.name || player.nickname || '玩家';
+      return {
+        id: player.id !== undefined ? player.id : index,
+        name,
+        avatar: player.avatar || player.avatarUrl || '',
+        avatarText: name.slice(0, 1),
+        avatarColor: avatarColors[index % avatarColors.length],
+        isOwner: !!player.isOwner,
+        score,
+        scoreText: score > 0 ? `+${score}` : `${score}`,
+        scoreClass: score > 0 ? 'is-positive' : score < 0 ? 'is-negative' : 'is-zero',
+        isWinner: false
+      };
+    });
+
+    const maxScore = players.length ? Math.max(...players.map((player) => player.score)) : 0;
+    if (maxScore > 0) {
+      players.forEach((player) => {
+        if (player.score === maxScore) player.isWinner = true;
+      });
+    }
+
+    const startTime = game.startTime || game.createTime || '';
+    const duration = game.duration || '';
+    const metaText = [
+      startTime ? `${startTime} 开始` : '',
+      duration ? `已进行 ${duration}` : ''
+    ].filter(Boolean).join(' · ') || '暂无对局时间信息';
+
+    this.setData({
+      latestGame: {
+        id: game.id,
+        modeText: modeMap[game.mode] || '计分桌',
+        status: game.status,
+        statusText: game.status === 'active' ? '对局进行中' : '已结束',
+        players,
+        metaText
+      }
+    });
+  },
+
   selectCard(e){
-    const id = e.currentTarget.dataset.name.id
+    const id = e.currentTarget.dataset.id
     switch(id){
       case 'single':
-        this.setData({
-          wifiInfo: {
-            SSID: "单人记分局",
-            password: "12345678",
-          },
-        });
-        break;
       case 'multi':
-        this.showTagSelectionModal('multi');
-        break;
       case 'pool':
-        this.setData({
-          wifiInfo: {
-            SSID: "分数池局",
-            password: "12345678",
-          },
-        });
+        this.showTagSelectionModal(id);
         break;
-      case 4:
-        this.connectWifiInti()
+      case 'wifi':
+        this.connectWifiInti();
         break;
     }
   },
@@ -321,7 +377,7 @@ Page({
 
   // 显示标签选择弹窗并获取标签
   async showTagSelectionModal(mode) {
-    this.setData({ showTagModal: true, selectedTags: null, currentMode: mode }); // 打开弹窗时清空已选标签，并设置当前模式
+    this.setData({ showTagModal: true, selectedTags: null, pendingMode: mode }); // 打开弹窗时清空已选标签，并记录待开局模式
     wx.showLoading({ title: '加载标签中...' });
     try {
       const tags = await userApi.getTags();
@@ -336,12 +392,12 @@ Page({
 
   // 关闭标签选择弹窗
   onCancelTagSelection() {
-    this.setData({ showTagModal: false, selectedTags: null, currentMode: null });
+    this.setData({ showTagModal: false, selectedTags: null, pendingMode: null });
   },
 
   async onConfirmTagSelection() {
     const selectedTagId = this.data.selectedTags; // 获取当前选中的tagId (可能是null)
-    const mode = this.data.currentMode; // 从data中获取当前开局模式
+    const mode = this.data.pendingMode; // 获取待开局的模式
 
     // 准备发送给接口的数据
     const requestData = { mode };
@@ -380,12 +436,41 @@ Page({
     }
   },
 
-  // 关闭标签选择弹窗
-  onCancelTagSelection() {
-    const tagId = String(e.currentTarget.dataset.id); // Ensure it's a string
-    console.log('点击的标签ID', tagId);
+  // 打开规则说明
+  onRulesTap() {
+    wx.showModal({
+      title: '规则说明',
+      content: '支持全国多地计番规则预设与自定义，开局后可邀请牌友扫码实时同步记分。',
+      showCancel: false,
+      confirmText: '知道了',
+      confirmColor: '#059669'
+    });
+  },
+
+  // 查看最近一局走势
+  onTrendTap() {
+    this.navigateToGameDetail();
+  },
+
+  // 封盘结算
+  onSettleTap() {
+    wx.showToast({ title: '封盘结算功能开发中', icon: 'none' });
+  },
+
+  // 管理桌台
+  onManageTap() {
+    wx.showToast({ title: '桌台管理功能开发中', icon: 'none' });
+  },
+
+  // 跳转对局记录
+  goToRecord() {
+    wx.redirectTo({ url: '/pages/record-game/record-game' });
+  },
+
+  // 选择/取消选择标签
+  onTagTap(e) {
+    const tagId = e.currentTarget.dataset.id;
     const newSelectedTags = this.data.selectedTags === tagId ? null : tagId;
-    console.log('newSelectedTags', newSelectedTags);
     this.setData({
       selectedTags: newSelectedTags,
       tags: [...this.data.tags] // 创建新数组引用，强制刷新tags数组触发视图更新

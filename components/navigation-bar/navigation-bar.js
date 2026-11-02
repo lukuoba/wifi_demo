@@ -19,8 +19,8 @@ Component({
   data: {
     navItems: [
       { id: 'home', name: '首页', icon: 'a-shouyeshuxing1shouye-xuanze', path: '/pages/index/index' },
-      { id: 'record', name: '记录', icon: 'jilu', path: '/pages/record-game/record-game' },
-      { id: 'mine', name: '个人中心', icon: 'tidanren', path: '/pages/mine/mine' }
+      { id: 'record', name: '对局记录', icon: 'jilu', path: '/pages/record-game/record-game' },
+      { id: 'mine', name: '我的', icon: 'tidanren', path: '/pages/mine/mine' }
     ]
   },
 

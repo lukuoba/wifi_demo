@@ -1,125 +1,632 @@
 /* pages/record-game/record-game.wxss */
-.container {
-  background-color: #f5f5f5;
-  min-height: 100vh;
-  padding-bottom: env(safe-area-inset-bottom);
+page {
+  background-color: #f8fafc;
 }
 
-/* 顶部吸顶筛选模块 */
-.sticky-header {
+.page-container {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  padding-bottom: calc(140rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Hiragino Sans GB", sans-serif;
+}
+
+/* 吸顶容器 */
+.sticky-top-wrap {
   position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  background-color: #ffffff;
-  padding: 20rpx 30rpx;
+  z-index: 50;
+  background-color: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12rpx);
+}
+
+/* 自定义导航 */
+.custom-nav {
+  position: relative;
+}
+
+.nav-inner {
+  height: 100%;
+  position: relative;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  border-bottom: 1rpx solid #eeeeee;
+  justify-content: center;
+}
+
+.nav-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1e293b;
+  letter-spacing: 1rpx;
+}
+
+.nav-left {
+  position: absolute;
+  left: 28rpx;
+  font-size: 22rpx;
+  color: #94a3b8;
+  font-weight: 500;
+  letter-spacing: 1rpx;
+}
+
+/* 吸顶分段 + 操作栏 */
+.sticky-filter {
+  padding: 20rpx 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2rpx solid rgba(226, 232, 240, 0.5);
 }
 
 .filter-tabs {
   display: flex;
-  background-color: #f5f5f5;
-  border-radius: 8rpx;
-  padding: 4rpx;
-  border: 1rpx solid #52c41a;
+  align-items: center;
+  background-color: rgba(241, 245, 249, 0.9);
+  padding: 8rpx;
+  border-radius: 20rpx;
 }
 
-.tab-item {
-  padding: 10rpx 24rpx;
-  font-size: 26rpx;
-  color: #666;
-  border-radius: 6rpx;
+.tab-pill {
+  padding: 12rpx 28rpx;
+  font-size: 24rpx;
+  color: #64748b;
+  font-weight: 500;
+  border-radius: 16rpx;
+  transition: all 0.2s;
 }
 
-.tab-item.active {
-  background-color: #52c41a;
-  color: #ffffff;
+.tab-pill.active {
+  background-color: #ffffff;
+  color: #059669;
+  font-weight: 700;
+  box-shadow: 0 2rpx 6rpx rgba(15, 23, 42, 0.06);
 }
 
-.header-btns {
-  display: flex;
-  gap: 16rpx;
-}
-
-.btn-item {
-  border: 1rpx solid #ddd;
-  padding: 10rpx 20rpx;
-  border-radius: 8rpx;
-  font-size: 26rpx;
-  color: #666;
+.filter-actions {
   display: flex;
   align-items: center;
+  gap: 12rpx;
 }
 
-.icon-btn {
-  padding: 10rpx 12rpx;
-}
-
-/* 统计摘要卡片 */
-.summary-card {
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: #ffffff;
-  margin: 20rpx;
-  border-radius: 12rpx;
-  padding: 24rpx;
+  border: 2rpx solid rgba(226, 232, 240, 0.7);
+  border-radius: 20rpx;
+  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.02);
 }
 
-.summary-header {
+.filter-btn {
+  padding: 10rpx 20rpx;
+  font-size: 22rpx;
+  color: #475569;
+  gap: 8rpx;
+}
+
+.filter-icon {
+  position: relative;
+  width: 22rpx;
+  height: 22rpx;
+  border: 2rpx solid #94a3b8;
+  border-radius: 4rpx;
+  background: linear-gradient(to top, transparent 30%, transparent 30%, #ffffff 30%, #ffffff 55%, transparent 55%);
+}
+
+.filter-icon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -2rpx;
+  right: -2rpx;
+  height: 2rpx;
+  background-color: #94a3b8;
+}
+
+.more-btn {
+  width: 60rpx;
+  height: 60rpx;
+}
+
+.page-content {
+  padding: 24rpx 28rpx 0;
+}
+
+/* 概览看板 */
+.summary-card {
+  position: relative;
+  background-color: #ffffff;
+  border: 2rpx solid #f1f5f9;
+  border-radius: 32rpx;
+  padding: 28rpx;
+  box-shadow: 0 8rpx 30rpx rgba(15, 23, 42, 0.04);
+  margin-bottom: 24rpx;
+  overflow: hidden;
+}
+
+.summary-decor {
+  position: absolute;
+  top: -80rpx;
+  right: -60rpx;
+  width: 220rpx;
+  height: 220rpx;
+  border-radius: 50%;
+  background-color: #ecfdf5;
+  filter: blur(30rpx);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.summary-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24rpx;
+  padding-bottom: 24rpx;
+  border-bottom: 2rpx solid #f1f5f9;
 }
 
-.summary-info {
-  font-size: 24rpx;
-  color: #999;
-}
-
-.rank-link {
+.summary-head-left {
   display: flex;
-  align-items: center;
-  gap: 4rpx;
+  align-items: baseline;
 }
 
-.rank-link text {
-  font-size: 24rpx;
-  color: #52c41a;
+.summary-label {
+  font-size: 22rpx;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.summary-total {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 8rpx 0 6rpx;
+  letter-spacing: 1rpx;
+}
+
+.summary-unit {
+  font-size: 22rpx;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.rank-entry {
+  display: inline-flex;
+  align-items: center;
+  padding: 8rpx 20rpx;
+  border-radius: 999rpx;
+  background-color: #ecfdf5;
+  font-size: 22rpx;
+  color: #059669;
+  font-weight: 700;
+}
+
+.rank-entry text {
+  margin-left: 4rpx;
+}
+
+.rank-icon {
+  position: relative;
+  width: 18rpx;
+  height: 18rpx;
+  border: 2rpx solid #059669;
+  border-radius: 3rpx;
+  box-sizing: border-box;
+}
+
+.rank-icon::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6rpx;
+  width: 2rpx;
+  height: 10rpx;
+  background-color: #059669;
+  transform: translateX(-50%);
 }
 
 .summary-grid {
   display: flex;
-  flex-direction: column;
-  gap: 16rpx;
+  padding-top: 28rpx;
 }
 
-.summary-row {
-  display: flex;
-}
-
-.summary-item {
+.summary-cell {
   flex: 1;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.summary-cell.bordered {
+  border-left: 2rpx solid #f1f5f9;
+  border-right: 2rpx solid #f1f5f9;
+}
+
+.cell-label {
+  font-size: 20rpx;
+  color: #94a3b8;
+  font-weight: 500;
+  margin-bottom: 4rpx;
+  text-align: center;
+}
+
+.cell-value-row {
+  display: flex;
   align-items: baseline;
-  gap: 12rpx;
 }
 
-.summary-item .label {
-  font-size: 24rpx;
-  color: #666;
-  width: 60rpx;
+.cell-value {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #0f172a;
 }
 
-.summary-item .value {
+.cell-value.net {
   font-size: 28rpx;
-  color: #333;
+}
+
+.cell-value.net.is-negative {
+  color: #475569;
+}
+
+.cell-unit {
+  margin-left: 4rpx;
+  font-size: 18rpx;
+  color: #94a3b8;
+}
+
+.cell-sub {
+  margin-top: 6rpx;
+  font-size: 20rpx;
+  font-weight: 700;
+}
+
+.cell-sub.positive {
+  color: #f43f5e;
+}
+
+.cell-sub.negative {
+  color: #475569;
+}
+
+.cell-pill {
+  margin-top: 6rpx;
+  padding: 2rpx 10rpx;
+  border-radius: 8rpx;
+  background-color: #f1f5f9;
+  font-size: 18rpx;
+  color: #64748b;
   font-weight: 500;
 }
 
-/* 对局列表 */
-.game-list {
-  padding: 0 0rpx; /* play-game 组件自带 margin */
+/* 对局卡片列表 */
+.record-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.record-card {
+  background-color: #ffffff;
+  border: 2rpx solid #f1f5f9;
+  border-radius: 32rpx;
+  padding: 28rpx;
+  box-shadow: 0 4rpx 16rpx -2rpx rgba(15, 23, 42, 0.04);
+}
+
+.record-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20rpx;
+  border-bottom: 2rpx solid rgba(241, 245, 249, 0.8);
+}
+
+.record-head-left {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.record-mode {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.record-status-pill {
+  display: flex;
+  align-items: center;
+  padding: 4rpx 14rpx;
+  border-radius: 999rpx;
+  background-color: #ecfdf5;
+  gap: 8rpx;
+}
+
+.record-status-pill text {
+  font-size: 20rpx;
+  color: #047857;
+  font-weight: 500;
+}
+
+.record-status-dot {
+  position: relative;
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background-color: #10b981;
+}
+
+.record-status-ping {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #34d399;
+  opacity: 0.75;
+  animation: recordPing 1.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes recordPing {
+  75%,
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+.record-status-finished {
+  font-size: 20rpx;
+  color: #94a3b8;
+  font-weight: 500;
+  padding: 4rpx 14rpx;
+  border-radius: 999rpx;
+  background-color: #f1f5f9;
+}
+
+.record-actions {
+  display: flex;
+  gap: 8rpx;
+}
+
+.record-action-item {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.record-action-item:active {
+  background-color: #f8fafc;
+}
+
+/* 玩家列表 */
+.record-players {
+  display: flex;
+  padding: 28rpx 0;
+}
+
+.record-players.is-five-cols {
+  gap: 8rpx;
+}
+
+.record-players.is-four-cols {
+  gap: 16rpx;
+}
+
+.record-player {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+}
+
+.record-player.is-winner {
+  padding: 6rpx 0;
+  background-color: rgba(254, 226, 226, 0.5);
+  border-radius: 20rpx;
+}
+
+.avatar-wrap {
+  position: relative;
+  margin-bottom: 10rpx;
+}
+
+.avatar-img,
+.avatar-fallback {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+}
+
+.avatar-img {
+  display: block;
+}
+
+.avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: 700;
+  box-shadow: 0 0 0 2rpx rgba(226, 232, 240, 0.6);
+  background-color: #e2e8f0;
+}
+
+.record-player.is-winner .avatar-fallback {
+  box-shadow: 0 0 0 4rpx rgba(251, 113, 133, 0.4);
+  background-color: #fef2f2;
+  color: #7f1d1d;
+}
+
+.owner-tag {
+  position: absolute;
+  left: -6rpx;
+  bottom: -10rpx;
+  padding: 0 8rpx;
+  border-radius: 999rpx;
+  background-color: #f59e0b;
+  border: 2rpx solid #ffffff;
+  color: #ffffff;
+  font-size: 16rpx;
+  font-weight: 700;
+  line-height: 22rpx;
+  white-space: nowrap;
+}
+
+.winner-tag {
+  position: absolute;
+  top: -10rpx;
+  right: -6rpx;
+  font-size: 24rpx;
+  line-height: 1;
+}
+
+.record-player-name {
+  font-size: 22rpx;
+  color: #475569;
+  font-weight: 500;
+  max-width: 100rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.record-player.is-winner .record-player-name {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.record-player-score {
+  margin-top: 6rpx;
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #475569;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+}
+
+.record-player-score.is-positive {
+  color: #f43f5e;
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+.record-player-score.is-negative {
+  color: #475569;
+}
+
+.record-player-score.is-zero {
+  color: #94a3b8;
+}
+
+/* 卡片底栏 */
+.record-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20rpx;
+  border-top: 2rpx solid #f8fafc;
+}
+
+.record-meta {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  margin-right: 16rpx;
+  font-size: 20rpx;
+  color: #94a3b8;
+}
+
+.record-meta text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clock-icon {
+  position: relative;
+  width: 24rpx;
+  height: 24rpx;
+  border: 2rpx solid #cbd5e1;
+  border-radius: 50%;
+  margin-right: 8rpx;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.clock-icon::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2rpx;
+  height: 6rpx;
+  background-color: #cbd5e1;
+  transform: translate(-50%, -100%);
+}
+
+.clock-icon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6rpx;
+  height: 2rpx;
+  background-color: #cbd5e1;
+  transform: translate(0, -50%);
+}
+
+.record-detail-btn {
+  display: flex;
+  align-items: center;
+  font-size: 20rpx;
+  font-weight: 600;
+  color: #059669;
+  flex-shrink: 0;
+}
+
+.detail-arrow {
+  margin-left: 4rpx;
+  font-size: 24rpx;
+  line-height: 1;
+}
+
+/* 空状态 */
+.records-empty {
+  padding: 80rpx 32rpx;
+  text-align: center;
+}
+
+.records-empty .empty-icon {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 28rpx;
+  background-color: #ecfdf5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24rpx;
+}
+
+.records-empty .empty-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 8rpx;
+}
+
+.records-empty .empty-desc {
+  display: block;
+  font-size: 22rpx;
+  color: #94a3b8;
 }

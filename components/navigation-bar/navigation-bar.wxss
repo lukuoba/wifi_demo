@@ -5,11 +5,11 @@
   left: 0;
   right: 0;
   height: 110rpx;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.94);
   display: flex;
   justify-content: space-around;
   align-items: center;
-  border-top: 1rpx solid #eeeeee;
+  border-top: 1rpx solid #f1f5f9;
   padding-bottom: env(safe-area-inset-bottom);
   z-index: 999;
 }
@@ -32,12 +32,12 @@
 
 .tab-text {
   font-size: 24rpx;
-  color: #999999;
+  color: #94a3b8;
 }
 
 /* 选中态样式 */
 .tab-item-bottom-bar.active .tab-text {
-  color: #52c41a; /* 图片中的绿色主题色 */
+  color: #059669;
 }
 
 /* 占位元素 */
