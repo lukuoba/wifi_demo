@@ -8,74 +8,60 @@ App({
   },
 
   onLaunch() {
-    this.checkLoginStatus();
+    // 启动会话：本地有双 token 直接复用，没有就走 wx.login 静默登录
+    this.loginReady = this.bootstrap();
   },
 
   /**
-   * 检查登录与注册状态（静默登录流程）
+   * 冷启动会话恢复
+   * - 本地有 auth（accessToken/refreshToken）→ 直接用，不再走 wx.login
+   * - 本地没有 → 静默登录一次
+   * accessToken 过期由 userApi 在 401 时自动刷新并重放，用户无感
    */
-  async checkLoginStatus() {
+  async bootstrap() {
+    const hadSession = !!userApi.getAuth();
+
     try {
-      // 1. 检查本地是否有 Token
-      const token = wx.getStorageSync('token');
-      
-      if (!token) {
-        // 2. 没有 Token，执行静默登录
-        console.log('本地无 Token，执行静默登录...');
-        const { code } = await wx.login();
-        console.log('获取到的登录凭证:', code);
-        const loginRes = await userApi.login(code);
-        
-        if (loginRes && loginRes.token) {
-          // 4. 存储 Token
-          wx.setStorageSync('token', loginRes.token);
-          wx.setStorageSync('openid', loginRes.user.openid);
-          if(loginRes.isNewUser){
-            this.handleUserInfo(loginRes.user || loginRes.userInfo);
-          } else {
-            this.handleUserInfo(loginRes.user || loginRes.userInfo);
-          }
-        } else {
-          throw new Error('登录失败：未返回 Token');
-        }
-      } else {
-        // 5. 有 Token，直接获取/校验用户信息
-        console.log('本地有 Token，校验用户信息...');
-        const openid = wx.getStorageSync('openid');
-        const userInfo = await userApi.getProfile(openid);
-        this.handleUserInfo(userInfo);
+      const session = await userApi.restoreSession();
+      let userInfo = session && session.user;
+
+      // 本地只存了 token 没存 user 时，补拉一次资料
+      if (!userInfo) {
+        userInfo = await userApi.getProfile();
       }
+
+      // 首次登录 / 会话重建时回首页刷新数据；已有会话则保留当前入口页（如分享进入详情页）
+      this.handleUserInfo(userInfo, { redirectHome: !hadSession });
+      return userInfo;
     } catch (err) {
-      console.error('静默登录流程失败:', err);
-      // 登录失败可以尝试重新登录或提示
+      console.error('启动登录流程失败:', err);
+      return null;
     }
   },
 
   /**
    * 处理用户信息及跳转逻辑
    */
-  handleUserInfo(userInfo) {
+  handleUserInfo(userInfo, options = {}) {
     if (!userInfo) return;
 
-    // 判断是否需要完善资料 (nickname 为空则跳转)
-    if (!userInfo.nickname || userInfo.nickname === '') {
+    if (!userInfo.nickname) {
       console.log('用户资料不完整，引导至注册/设置页');
       wx.reLaunch({
         url: '/pages/edit-profile/edit-profile?mode=register'
       });
-    } else {
-    // 更新全局数据
-      console.log('app.js: globalData.isRegistered set to true');
-      console.log('app.js: handleUserInfo setting isRegistered to true');
-      this.globalData.userInfo = userInfo;
-      this.globalData.isRegistered = true;
-      wx.setStorageSync('userInfo', userInfo);
-      console.log('app.js: 登录成功，准备进入主页或刷新主页内容');
-      console.log('app.js: handleUserInfo about to call wx.reLaunch to /pages/index/index');
-      wx.reLaunch({
-        url: '/pages/index/index'
-      });
-      console.log('app.js: wx.reLaunch called in handleUserInfo.');
+      return;
+    }
+
+    this.globalData.userInfo = userInfo;
+    this.globalData.isRegistered = true;
+    wx.setStorageSync('userInfo', userInfo);
+    if (userInfo.openid) {
+      wx.setStorageSync('openid', userInfo.openid);
+    }
+
+    if (options.redirectHome) {
+      wx.reLaunch({ url: '/pages/index/index' });
     }
   },
 
@@ -87,6 +73,11 @@ App({
     this.globalData.userInfo = { ...(this.globalData.userInfo || {}), ...userInfo };
     this.globalData.isRegistered = !!this.globalData.userInfo.nickname;
     wx.setStorageSync('userInfo', this.globalData.userInfo);
-    console.log('全局用户信息已更新:', this.globalData.userInfo);
+
+    // 同步写回 auth，保证会话里的 user 与展示一致
+    const auth = userApi.getAuth();
+    if (auth) {
+      wx.setStorageSync('auth', { ...auth, user: this.globalData.userInfo });
+    }
   }
-})
+});
