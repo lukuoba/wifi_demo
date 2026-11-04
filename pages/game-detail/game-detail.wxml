@@ -12,6 +12,11 @@
         <view class="nav-center">
           <text class="nav-title">{{gameTitle}}</text>
         </view>
+        <!-- 右上角邀请：点击再次唤起二维码弹窗 -->
+        <view class="nav-invite" bindtap="onInvite">
+          <icon name="duoren" size="{{16}}" color="#059669" />
+          <text class="nav-invite-text">邀请</text>
+        </view>
       </view>
     </view>
 
@@ -107,6 +112,33 @@
 
   <!-- 固定底栏（给分快捷面板预留区域，暂无按钮） -->
   <view class="bottom-toolbar"></view>
+
+  <!-- 邀请二维码弹窗 -->
+  <view wx:if="{{showQrModal}}" class="qr-modal-wrap">
+    <view class="qr-modal-mask" bindtap="onCloseQrModal"></view>
+    <view class="qr-modal">
+      <view class="qr-modal-close" bindtap="onCloseQrModal">
+        <icon name="guanbianniu-copy" size="{{18}}" color="#94a3b8" />
+      </view>
+
+      <text class="qr-modal-title">邀请牌友</text>
+      <text class="qr-modal-subtitle">{{gameTitle}} · 房间 {{gameId}}</text>
+
+      <view class="qr-canvas-card">
+        <!-- 后端小程序码：微信扫一扫直接打开小程序进对局 -->
+        <image wx:if="{{wxacodeImage}}" class="qr-image" src="{{wxacodeImage}}" mode="aspectFit"></image>
+        <!-- 本地链接二维码兜底 -->
+        <canvas wx:else type="2d" id="qrCanvas" class="qr-canvas"></canvas>
+      </view>
+
+      <text class="qr-modal-hint">牌友扫描二维码加入本局</text>
+      <text class="qr-modal-hint-sub">也可以转发给微信好友，点击卡片直达</text>
+
+      <button class="qr-share-btn" open-type="share">
+        <text>转发给微信好友</text>
+      </button>
+    </view>
+  </view>
 
   <!-- 给分弹窗 -->
   <view wx:if="{{showScoreModal}}" class="score-modal-wrap">

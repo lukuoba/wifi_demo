@@ -140,7 +140,10 @@ Page({
     } catch (err) {
       wx.hideLoading();
       console.error('保存失败:', err);
-      wx.showToast({ title: '操作失败，请重试', icon: 'none' });
+      wx.showToast({
+        title: (err && err.message ? err.message : '操作失败，请重试').slice(0, 20),
+        icon: 'none'
+      });
     }
   }
 })

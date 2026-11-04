@@ -57,6 +57,28 @@ page {
   letter-spacing: 1rpx;
 }
 
+/* 右上角邀请按钮 */
+.nav-invite {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 56rpx;
+  padding: 0 20rpx;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  border-radius: 999rpx;
+  background-color: #ecfdf5;
+  box-sizing: border-box;
+}
+
+.nav-invite-text {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #059669;
+}
+
 /* 4 格快捷操作 */
 .quick-actions {
   display: flex;
@@ -573,4 +595,120 @@ page {
   background: linear-gradient(90deg, #059669 0%, #10b981 100%);
   color: #ffffff;
   box-shadow: 0 4rpx 12rpx rgba(5, 150, 105, 0.25);
+}
+
+/* 邀请二维码弹窗 */
+.qr-modal-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-modal-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 23, 42, 0.55);
+}
+
+.qr-modal {
+  position: relative;
+  z-index: 1;
+  width: 86%;
+  max-width: 620rpx;
+  background-color: #ffffff;
+  border-radius: 36rpx;
+  padding: 48rpx 40rpx calc(40rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.qr-modal-close {
+  position: absolute;
+  top: 24rpx;
+  right: 24rpx;
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #f1f5f9;
+}
+
+.qr-modal-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.qr-modal-subtitle {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #94a3b8;
+}
+
+.qr-canvas-card {
+  margin-top: 32rpx;
+  width: 380rpx;
+  height: 380rpx;
+  border-radius: 24rpx;
+  background-color: #ffffff;
+  border: 2rpx solid #e2e8f0;
+  padding: 16rpx;
+  box-sizing: border-box;
+}
+
+.qr-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.qr-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 16rpx;
+}
+
+.qr-modal-hint {
+  margin-top: 28rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #334155;
+}
+
+.qr-modal-hint-sub {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: #94a3b8;
+}
+
+.qr-share-btn {
+  margin-top: 36rpx;
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(90deg, #059669 0%, #10b981 100%);
+  color: #ffffff;
+  font-size: 30rpx;
+  font-weight: 700;
+  text-align: center;
+  padding: 0;
+  border: none;
+  box-shadow: 0 6rpx 18rpx rgba(5, 150, 105, 0.3);
+}
+
+.qr-share-btn::after {
+  border: none;
 }

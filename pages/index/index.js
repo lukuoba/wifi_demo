@@ -14,11 +14,7 @@ Page({
     isDevtools: false,
     statusBarHeight: 20,
     navBarHeight: 44,
-    showTagModal: false, // 控制标签选择弹窗的显示隐藏
-    tags: [],            // 存储获取到的所有标签
-    selectedTags: null,    // 存储用户已选择的标签
     currentMode: null,     // 存储最近一局数据
-    pendingMode: null,     // 存储待开局的模式
     latestGame: null,      // 首页最近一桌的展示数据
     todayStats: [
       { label: '累计局数', value: '18', unit: '局', tone: '' },
@@ -154,11 +150,34 @@ Page({
       case 'single':
       case 'multi':
       case 'pool':
-        this.showTagSelectionModal(id);
+        this.startGame(id);
         break;
       case 'wifi':
         this.connectWifiInti();
         break;
+    }
+  },
+
+  // 立即开局：直接请求开局接口，不弹标签选择
+  async startGame(mode) {
+    wx.showLoading({ title: '开局中...' });
+    try {
+      const result = await userApi.immediateStart({ mode });
+      console.log('立即开局成功', result);
+      wx.showToast({ title: '开局成功', icon: 'success' });
+      if (result && result.id) {
+        setTimeout(() => {
+          wx.navigateTo({
+            // invite=1：对局详情页收到后自动弹出邀请二维码
+            url: '/pages/game-detail/game-detail?gameId=' + result.id + '&invite=1',
+          });
+        }, 600); // 等 toast 展示一下再跳
+      }
+    } catch (error) {
+      console.error('立即开局失败', error);
+      wx.showToast({ title: error.message || '开局失败', icon: 'none' });
+    } finally {
+      wx.hideLoading();
     }
   },
 
@@ -375,56 +394,6 @@ Page({
     }, 1500); // 延迟1.5秒：适配不同机型的连接响应速度
   },
 
-  // 显示标签选择弹窗并获取标签
-  async showTagSelectionModal(mode) {
-    this.setData({ showTagModal: true, selectedTags: null, pendingMode: mode }); // 打开弹窗时清空已选标签，并记录待开局模式
-    wx.showLoading({ title: '加载标签中...' });
-    try {
-      const tags = await userApi.getTags();
-      this.setData({ tags: tags || [] }); // 假设返回的是标签数组
-    } catch (error) {
-      console.error('获取标签失败', error);
-      wx.showToast({ title: '获取标签失败', icon: 'none' });
-    } finally {
-      wx.hideLoading();
-    }
-  },
-
-  // 关闭标签选择弹窗
-  onCancelTagSelection() {
-    this.setData({ showTagModal: false, selectedTags: null, pendingMode: null });
-  },
-
-  async onConfirmTagSelection() {
-    const selectedTagId = this.data.selectedTags; // 获取当前选中的tagId (可能是null)
-    const mode = this.data.pendingMode; // 获取待开局的模式
-
-    // 准备发送给接口的数据
-    const requestData = { mode };
-    if (selectedTagId) {
-      requestData.tagId = selectedTagId;
-    }
-
-    wx.showLoading({ title: '开局中...' });
-    try {
-      const result = await userApi.immediateStart(requestData);
-      console.log('立即开局成功', result);
-      if(result){
-        wx.navigateTo({
-          url: '/pages/game-detail/game-detail?gameId=' + result.id,
-        });
-      }
-      wx.showToast({ title: '开局成功', icon: 'success' });
-      // TODO: 在这里执行跳转到游戏页面的逻辑，并传递 result
-    } catch (error) {
-      console.error('立即开局失败', error);
-      wx.showToast({ title: error.message || '开局失败', icon: 'none' });
-    } finally {
-      wx.hideLoading();
-      this.setData({ showTagModal: false }); // 无论成功失败，都关闭弹窗
-    }
-  },
-
   // 导航到对局详情页
   navigateToGameDetail() {
     if (this.data.currentMode && this.data.currentMode.id) {
@@ -465,15 +434,5 @@ Page({
   // 跳转对局记录
   goToRecord() {
     wx.redirectTo({ url: '/pages/record-game/record-game' });
-  },
-
-  // 选择/取消选择标签
-  onTagTap(e) {
-    const tagId = e.currentTarget.dataset.id;
-    const newSelectedTags = this.data.selectedTags === tagId ? null : tagId;
-    this.setData({
-      selectedTags: newSelectedTags,
-      tags: [...this.data.tags] // 创建新数组引用，强制刷新tags数组触发视图更新
-    });
   },
 });
